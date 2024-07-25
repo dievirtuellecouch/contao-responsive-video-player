@@ -1,0 +1,26 @@
+{
+    "name": "dvc/contao-responsive-video-player",
+    "description": "Adds a video player content element with support for responsive videos.",
+    "type": "contao-bundle",
+    "version": "0.5.0",
+    "require": {
+        "php": "^8.3",
+        "contao/core-bundle": "^5.3",
+        "bentools/cartesian-product": "1.4.*"
+    },
+    "license": "LGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Jonathan Hermann",
+            "email": "jh@d-v-c.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "DVC\\ResponsiveVideoPlayer\\": "src/"
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "DVC\\ResponsiveVideoPlayer\\ContaoManager\\Plugin"
+    }
+}

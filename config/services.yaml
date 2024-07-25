@@ -1,0 +1,26 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  DVC\ResponsiveVideoPlayer\Controller\ContentElement\ResponsiveVideoPlayerController:
+    arguments:
+      $filesStorage: '@contao.filesystem.virtual.files'
+
+  DVC\ResponsiveVideoPlayer\DependencyInjection\Compiler\SearchStrategyPass:
+
+  DVC\ResponsiveVideoPlayer\EventListener\DataContainer\AdjustConfigForContentElementType:
+
+  DVC\ResponsiveVideoPlayer\EventSubscriber\AddAssetsKernelRequestSubscriber:
+    arguments:
+      $packages: '@assets.packages'
+
+  DVC\ResponsiveVideoPlayer\FileVariantProvider\FileVariantProvider:
+    arguments:
+      - '@contao.filesystem.virtual.files'
+
+  DVC\ResponsiveVideoPlayer\FileVariantProvider\SearchStrategy\TrailingUnderscoreSearchStrategy:
+    tags: ['dvc.responsive_video_player.search_strategy']
+
+  DVC\ResponsiveVideoPlayer\FileVariantProvider\SearchStrategyProvider:

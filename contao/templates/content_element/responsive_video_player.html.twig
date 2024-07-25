@@ -1,0 +1,60 @@
+{% extends '@Contao/content_element/player' %}
+
+{% set shouldShowControls = figure.media.attributes.autoplay is not defined %}
+
+{% block headline_component %}
+<div class="video-player__overlay">{{ parent() }}</div>
+{% endblock headline_component %}
+
+{% block headline_attributes %}
+    {% set headline_attributes = attrs().addClass('headline') %}
+    {{ headline_attributes }}
+{% endblock %}
+
+{%- block attributes -%}
+    {% set attributes = attrs(attributes)
+        .removeClass('content-responsive-video-player')
+        .addClass('video-player')
+        .set('data-module', 'video-player', shouldShowControls)
+    %}
+    {% if figure.media.attributes.width is defined and figure.media.attributes.height is defined %}
+        {% set ratioComponents = [figure.media.attributes.width, figure.media.attributes.height] %}
+        {% do attributes.addStyle('--aspect-ratio: ' ~ ratioComponents | join('/') ) %}
+        {% do attributes.addClass('video-player_aspect-ratio-' ~ ratioComponents | join('-')) %}
+    {% endif %}
+    {{ parent() }}
+{%- endblock attributes -%}
+
+{% block content %}
+    {{ parent() }}
+    {% if shouldShowControls %}
+        <div class="video-player__play">
+            <button
+                class="video-player-button video-player-button_size-xl video-player-button_icon-play"
+                data-element="video-player-button"
+                data-action="play-toggle"
+                aria-label="Toggle play state"
+            ></button>
+        </div>
+        <div class="video-player__controls">
+            <button
+                class="video-player-button video-player-button_icon-play"
+                data-element="video-player-button"
+                data-action="play-toggle"
+                aria-label="Toggle play state"
+            ></button>
+            <button
+                class="video-player-button video-player-button_icon-fullscreen"
+                data-element="video-player-button"
+                data-action="fullscreen"
+                aria-label="Show video in fullscreen"
+            ></button>
+        </div>
+    {% endif %}
+{% endblock content %}
+
+{% block script %}
+{% add "video_player_js" to head %}
+    <script src="{{ asset('video-player.js', 'responsive_video_player') }}" defer></script>
+{% endadd %}
+{% endblock script %}
