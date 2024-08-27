@@ -49,6 +49,11 @@ class FileVariantCollection
         return new FilesystemItemIterator($items);
     }
 
+    public function hasOneVideoAtLeast(): bool
+    {
+        return !empty($this->getAllVideos()->toArray());
+    }
+
     private static function sortByMediaTypePriority(FilesystemItem $a, FilesystemItem $b): int
     {
         $aIsFile = $a->isFile();

@@ -46,7 +46,9 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
         $fileVariants = $this->fileVariantProvider->getVariantsFromBaseFile($baseFile);
 
         /** @var FilesystemItemIterator $filesystemItems */
-        $filesystemItems = $fileVariants->getAllVideos();
+        if ($fileVariants->hasOneVideoAtLeast()) {
+            $filesystemItems = $fileVariants->getAllVideos();
+        }
         $model->posterSRC = (string) $fileVariants->getPosterImage()?->getUuid() ?: '';
 
         if (!$sourceFiles = $this->getSourceFiles($filesystemItems)) {
