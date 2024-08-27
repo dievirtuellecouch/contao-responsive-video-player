@@ -24,3 +24,9 @@ services:
     tags: ['dvc.responsive_video_player.search_strategy']
 
   DVC\ResponsiveVideoPlayer\FileVariantProvider\SearchStrategyProvider:
+
+  DVC\ResponsiveVideoPlayer\Util\AssetUtility:
+    arguments:
+      $projectDir: '%kernel.project_dir%'
+      $uploadPath: '%contao.upload_path%'
+      $webDir: '%contao.web_dir%'

@@ -17,6 +17,7 @@ use Contao\FilesModel;
 use Contao\StringUtil;
 use DVC\ResponsiveVideoPlayer\FileVariantProvider\FileVariantCollection;
 use DVC\ResponsiveVideoPlayer\FileVariantProvider\FileVariantProvider;
+use DVC\ResponsiveVideoPlayer\Util\AssetUtility;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,6 +32,7 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
     private array $publicUriByStoragePath = [];
 
     public function __construct(
+        private readonly AssetUtility $assetUtility,
         private readonly FileVariantProvider $fileVariantProvider,
         private readonly VirtualFilesystem $filesStorage,
     ) {
@@ -147,6 +149,12 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
             }
 
             $items[] = $item;
+            $version = $this->assetUtility->getTimestampForFile($item->getPath());
+
+            if ($version !== null) {
+                $publicUri = $publicUri . '?v=' . $version;
+            }
+
             $this->publicUriByStoragePath[$item->getPath()] = $publicUri;
         }
 
