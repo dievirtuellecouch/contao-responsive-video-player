@@ -22,6 +22,10 @@ class AssetUtility
     {
         $mtime = null;
 
+        if (substr($src, 0, strlen($this->uploadPath . '/')) == $this->uploadPath  . '/') {
+            $src = substr($src, strlen($this->uploadPath  . '/'));
+        }
+
         if (file_exists($this->projectDir . '/' . $this->uploadPath . '/' . $src)) {
             $mtime = filemtime($this->projectDir . '/' . $this->uploadPath . '/' . $src);
         }

@@ -2,7 +2,7 @@
     "name": "dvc/contao-responsive-video-player",
     "description": "Adds a video player content element with support for responsive videos.",
     "type": "contao-bundle",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "require": {
         "php": "^8.3",
         "contao/core-bundle": "^5.3",
