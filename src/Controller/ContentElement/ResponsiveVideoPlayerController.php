@@ -81,9 +81,10 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
 
         $size = StringUtil::deserialize($model->playerSize, true);
         $posterVersion = $poster?->path ? $this->assetUtility->getTimestampForFile($poster->path) : '';
+        $posterPath = $poster?->path ? sprintf('%s?v=%s', $poster->path, $posterVersion) : null;
 
         $attributes = $this->parsePlayerOptions($model)
-            ->setIfExists('poster', $poster->path . '?v=' . $posterVersion, $poster?->path !== null)
+            ->setIfExists('poster', $posterPath)
             ->setIfExists('width', $size[0] ?? null)
             ->setIfExists('height', $size[1] ?? null)
             ->setIfExists('preload', $model->playerPreload)
