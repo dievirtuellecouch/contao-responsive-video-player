@@ -1,25 +1,20 @@
 .video-player {
-    --spacing-outside: 5cqi;
-    --spacing-inside: 2cqi;
-    --icon-size-m: 1.5rem;
-    --icon-size-xl: 4rem;
+    --spacing-outside: 0.6em;
+    --spacing-inside: 0.4em;
+    --icon-size-m: 0.3em;
+    --icon-size-xl: 0.6em;
     --_aspect-ratio: var(--aspect-ratio, 16 / 9);
     position: relative;
+    // https://utopia.fyi/type/calculator/?c=560,40,1.2,1280,80,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12
+    font-size: clamp(2.5rem, 0.5556rem + 5.5556cqi, 5rem);
 
     @media (pointer: coarse) {
-        --icon-size-m: 2rem;
-        --icon-size-xl: 6rem;
+        --icon-size-m: 0.5em;
+        --icon-size-xl: 0.8em;
     }
 
-    @supports (container-type: inline-size) {
-        container-type: inline-size;
-        --icon-size-m: 3cqi;
-        --icon-size-xl: 8cqi;
-
-        @media (pointer: coarse) {
-            --icon-size-m: 5cqi;
-            --icon-size-xl: 13cqi;
-        }
+    & figure {
+        display: contents;
     }
 
     & video {
