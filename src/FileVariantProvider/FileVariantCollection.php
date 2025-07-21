@@ -41,12 +41,12 @@ class FileVariantCollection
 
     public function getAllVideos(): FilesystemItemIterator
     {
-        $videoVariantWithFile = \array_filter(
+        $videoVariantWithFile = array_filter(
             $this->items,
             static fn (FileVariant $variant) => $variant->isVideo() && $variant->hasFile()
         );
 
-        $items = \array_map(static fn (FileVariant $variant) => $variant->getFile(), $videoVariantWithFile);
+        $items = array_map(static fn (FileVariant $variant) => $variant->getFile(), $videoVariantWithFile);
 
         usort($items, static fn (FilesystemItem $a, FilesystemItem $b): int => self::sortByMediaTypePriority($a, $b));
 
@@ -78,13 +78,13 @@ class FileVariantCollection
         $extraA = self::extraToArray($a->getExtraMetadata());
         $extraB = self::extraToArray($b->getExtraMetadata());
 
-        $sortOrderA = \array_key_exists('media', $a->getExtraMetadata()) ? -1 : 1;
-        $sortOrderB = \array_key_exists('media', $b->getExtraMetadata()) ? -1 : 1;
+        $sortOrderA = array_key_exists('media', $extraA) ? -1 : 1;
+        $sortOrderB = array_key_exists('media', $extraB) ? -1 : 1;
 
         return $sortOrderA <=> $sortOrderB;
     }
 
-     /**
+    /**
      * Normalises Extra‑Metadata to a plain array for legacy helper functions.
      */
     private static function extraToArray(ExtraMetadata|array $extra): array
