@@ -3,7 +3,13 @@
 namespace DVC\ResponsiveVideoPlayer\FileVariantProvider;
 
 use Contao\CoreBundle\Filesystem\FilesystemItem;
+use Contao\CoreBundle\Filesystem\ExtraMetadata;
 use DVC\ResponsiveVideoPlayer\FileVariantProvider\VariantIdentifier;
+
+/**
+ * @internal Fix for Contao ≥5.5 where `getExtraMetadata()` now returns an
+ * `ExtraMetadata` value-object instead of a raw array.
+ */
 
 class FileVariant
 {
@@ -27,10 +33,9 @@ class FileVariant
 
     public function isVideo(): bool
     {
-        return match($this->identifier) {
-            VariantIdentifier::VideoDesktop => true,
-            VariantIdentifier::VideoMobile => true,
-            VariantIdentifier::ImagePoster => false,
+        return match ($this->identifier) {
+            VariantIdentifier::VideoDesktop, VariantIdentifier::VideoMobile => true,
+            default => false,
         };
     }
 
@@ -39,19 +44,24 @@ class FileVariant
         return $this->identifier === VariantIdentifier::ImagePoster;
     }
 
+    /**
+     * Adds media-query metadata to the mobile video variant.
+     */
     private function prepareFile(): void
     {
         if (!$this->hasFile()) {
             return;
         }
 
+        // Only for the “mobile” source add an additional media query.
         if ($this->identifier === VariantIdentifier::VideoMobile) {
-            $metadata = \array_merge(
-                $this->file->getExtraMetadata(),
-                ['media' => '(max-width: 640px)']
-            );
+            // Ensure we always have an array when merging.
+            $current = $this->file->getExtraMetadata(); // ExtraMetadata object
 
-            $this->file = $this->file->withExtraMetadata($metadata);
+            // Convert to array, merge, then convert back to ExtraMetadata.
+            $merged = array_merge($current->all(), ['media' => '(max-width: 640px)']);
+
+            $this->file = $this->file->withExtraMetadata(new ExtraMetadata($merged));
         }
     }
 }

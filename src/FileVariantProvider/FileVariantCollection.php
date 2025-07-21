@@ -4,8 +4,12 @@ namespace DVC\ResponsiveVideoPlayer\FileVariantProvider;
 
 use Contao\CoreBundle\Filesystem\FilesystemItem;
 use Contao\CoreBundle\Filesystem\FilesystemItemIterator;
-use DVC\ResponsiveVideoPlayer\FileVariantProvider\FileVariant;
+use Contao\CoreBundle\Filesystem\ExtraMetadata;
 
+/**
+ * Fix: compatible with Contao ≥5.5 where getExtraMetadata() returns an
+ * ExtraMetadata object instead of a raw array.
+ */
 class FileVariantCollection
 {
     public function __construct(
@@ -54,10 +58,15 @@ class FileVariantCollection
         return !empty($this->getAllVideos()->toArray());
     }
 
+    /**
+     * Mobile (<640 px) variants should come first, so we sort by the presence
+     * of a `media` attribute in the Extra‑Metadata.
+     */
     private static function sortByMediaTypePriority(FilesystemItem $a, FilesystemItem $b): int
     {
         $aIsFile = $a->isFile();
 
+        // folders ("streams") always come after files
         if (0 !== ($sort = ($b->isFile() <=> $aIsFile))) {
             return $sort;
         }
@@ -66,9 +75,20 @@ class FileVariantCollection
             return 0;
         }
 
+        $extraA = self::extraToArray($a->getExtraMetadata());
+        $extraB = self::extraToArray($b->getExtraMetadata());
+
         $sortOrderA = \array_key_exists('media', $a->getExtraMetadata()) ? -1 : 1;
         $sortOrderB = \array_key_exists('media', $b->getExtraMetadata()) ? -1 : 1;
 
-        return (false === $sortOrderA ? PHP_INT_MAX : $sortOrderA) <=> (false === $sortOrderB ? PHP_INT_MAX : $sortOrderB);
+        return $sortOrderA <=> $sortOrderB;
+    }
+
+     /**
+     * Normalises Extra‑Metadata to a plain array for legacy helper functions.
+     */
+    private static function extraToArray(ExtraMetadata|array $extra): array
+    {
+        return $extra instanceof ExtraMetadata ? $extra->all() : $extra;
     }
 }
