@@ -7,9 +7,10 @@ use Contao\CoreBundle\Filesystem\ExtraMetadata;
 use DVC\ResponsiveVideoPlayer\FileVariantProvider\VariantIdentifier;
 
 /**
- * @internal Fix for Contao ≥5.5 where `getExtraMetadata()` - now returns an
+ * @internal Fix for Contao ≥5.5 where `getExtraMetadata()` now returns an
  * `ExtraMetadata` value-object instead of a raw array.
  */
+
 class FileVariant
 {
     public function __construct(

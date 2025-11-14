@@ -1,9 +1,14 @@
 {% extends '@Contao/content_element/player' %}
 
-{% set shouldShowControls = figure.media.attributes.autoplay is not defined %}
+{# Only show custom controls in FE, never in BE editor view #}
+{% set shouldShowControls = (not as_editor_view) and (figure.media.attributes.autoplay is not defined) %}
 
 {% block headline_component %}
-<div class="video-player__overlay">{{ parent() }}</div>
+    {% if not as_editor_view %}
+        <div class="video-player__overlay">{{ parent() }}</div>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
 {% endblock headline_component %}
 
 {% block headline_attributes %}
@@ -12,15 +17,17 @@
 {% endblock %}
 
 {%- block attributes -%}
-    {% set attributes = attrs(attributes)
-        .removeClass('content-responsive-video-player')
-        .addClass('video-player')
-        .set('data-module', 'video-player', shouldShowControls)
-    %}
-    {% if figure.media.attributes.width is defined and figure.media.attributes.height is defined %}
-        {% set ratioComponents = [figure.media.attributes.width, figure.media.attributes.height] %}
-        {% do attributes.addStyle('--aspect-ratio: ' ~ ratioComponents | join('/') ) %}
-        {% do attributes.addClass('video-player_aspect-ratio-' ~ ratioComponents | join('-')) %}
+    {% if not as_editor_view %}
+        {% set attributes = attrs(attributes)
+            .removeClass('content-responsive-video-player')
+            .addClass('video-player')
+            .set('data-module', 'video-player', shouldShowControls)
+        %}
+        {% if figure.media.attributes.width is defined and figure.media.attributes.height is defined %}
+            {% set ratioComponents = [figure.media.attributes.width, figure.media.attributes.height] %}
+            {% do attributes.addStyle('--aspect-ratio: ' ~ ratioComponents | join('/') ) %}
+            {% do attributes.addClass('video-player_aspect-ratio-' ~ ratioComponents | join('-')) %}
+        {% endif %}
     {% endif %}
     {{ parent() }}
 {%- endblock attributes -%}
