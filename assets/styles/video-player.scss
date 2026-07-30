@@ -1,0 +1,167 @@
+.video-player {
+    --spacing-outside: 0.6em;
+    --spacing-inside: 0.4em;
+    --icon-size-m: 0.3em;
+    --icon-size-xl: 0.6em;
+    --_aspect-ratio: var(--aspect-ratio, 16 / 9);
+    position: relative;
+    // https://utopia.fyi/type/calculator/?c=560,40,1.2,1280,80,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12
+    font-size: clamp(2.5rem, 0.5556rem + 5.5556cqi, 5rem);
+
+    @media (pointer: coarse) {
+        --icon-size-m: 0.5em;
+        --icon-size-xl: 0.8em;
+    }
+
+    & figure {
+        display: contents;
+    }
+
+    & video {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        aspect-ratio: var(--_aspect-ratio);
+    }
+
+    &__controls,
+    &__overlay,
+    &__play {
+        transition: opacity var(--timing-duration-default);
+        pointer-events: none;
+    }
+
+    &__controls,
+    &__play {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: var(--spacing-outside);
+
+        & > * {
+            pointer-events: auto;
+            z-index: 1;
+        }
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        padding: var(--spacing-outside);
+        gap: var(--spacing-inside);
+    }
+
+    &__play {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: var(--spacing-outside);
+    }
+
+    &__overlay {
+        position: absolute;
+        padding: var(--spacing-outside);
+        max-width: 45%;
+    }
+
+    &-button {
+        appearance: none;
+        background: transparent;
+        border: none;
+        width: var(--icon-size-m);
+        height: var(--icon-size-m);
+        transition: transform var(--timing-duration-default);
+        -webkit-tap-highlight-color: transparent;
+
+        @media (hover: hover) {
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+
+        &:active {
+            transform: scale(0.9);
+        }
+
+        &_size-xl {
+            width: var(--icon-size-xl);
+            height: var(--icon-size-xl);
+        }
+
+        &_icon-play {
+            background-image: var(--icon-play, url("./play.svg"));
+
+            &.video-player-button_size-xl {
+                background-image: var(--icon-play-xl, url("./play.svg"));
+            }
+
+            &:not(.video-player-button_size-xl) {
+
+                &[data-state="playing"] {
+                    background-image: var(--icon-pause, url("./pause.svg"));
+                }
+            }
+        }
+
+        &_icon-fullscreen {
+            background-image: var(--icon-fullscreen, url("./fullscreen.svg"));
+        }
+    }
+
+    &[data-hide-controls="true"] {
+
+        & .video-player {
+            &__play,
+            &__controls {
+                opacity: 0;
+            }
+        }
+    }
+
+    &[data-show-play-overlay="true"] {
+
+        & .video-player {
+
+            &__controls {
+                opacity: 0;
+            }
+        }
+    }
+
+    &[data-show-play-overlay="false"] {
+
+        & .headline {
+            opacity: 0;
+        }
+
+        & .video-player__play {
+            opacity: 0;
+
+            & > * {
+                pointer-events: none;
+            }
+        }
+    }
+
+    &:not(.video-player_can-fullscreen) {
+
+        & .video-player-button_icon-fullscreen {
+            opacity: 0;
+        }
+    }
+
+    &:not([data-show-play-overlay="false"]) {
+
+        & .video-player__controls {
+            opacity: 0;
+        }
+    }
+}
