@@ -99,7 +99,7 @@ const VideoPlayer = function() {
         if (!elements.video.requestFullscreen || !elements.video.webkitRequestFullscreen) {
             return;
         }
-        
+
         elements.container.classList.add('video-player_can-fullscreen');
     };
 

@@ -16,7 +16,7 @@ class AddAssetsKernelRequestSubscriber implements EventSubscriberInterface
     ) {
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [KernelEvents::REQUEST => 'onKernelRequest'];
     }
@@ -34,6 +34,6 @@ class AddAssetsKernelRequestSubscriber implements EventSubscriberInterface
 
     private static function relativePath(string $path): string
     {
-        return preg_replace('/^\//', '', $path);
+        return ltrim($path, '/');
     }
 }

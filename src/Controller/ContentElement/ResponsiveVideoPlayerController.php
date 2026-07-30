@@ -98,17 +98,12 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
 
         $sources = array_map(
             function (FilesystemItem $item) use (&$captions, $range): HtmlAttributes {
-                // Use ExtraMetadata API (Contao 5.3+) instead of array access
-                $extra = $item->getExtraMetadata();
-                $caption = $extra->getLocalized()?->getDefault()?->getCaption();
-                $media   = $extra->get('media');
-
-                $captions[] = $caption;
+                $captions[] = ($item->getExtraMetadata()['metadata'] ?? null)?->getDefault()?->getCaption();
 
                 return (new HtmlAttributes())
                     ->setIfExists('type', $item->getMimeType(''))
                     ->set('src', $this->publicUriByStoragePath[$item->getPath()].$range)
-                    ->setIfExists('media', $media)
+                    ->setIfExists('media', $item->getExtraMetadata()['media'] ?? null)
                 ;
             },
             $sourceFiles,
@@ -149,20 +144,13 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
     {
         $filesystemItems = $filesystemItems->sort(SortMode::mediaTypePriority);
         $items = [];
-        $seen = [];
 
         foreach ($filesystemItems as $item) {
             if (!$publicUri = $this->filesStorage->generatePublicUri($item->getPath())) {
                 continue;
             }
 
-            // Deduplicate by storage path to prevent duplicate previews in backend lists
-            if (isset($seen[$item->getPath()])) {
-                continue;
-            }
-
             $items[] = $item;
-            $seen[$item->getPath()] = true;
             $version = $this->assetUtility->getTimestampForFile($item->getPath());
 
             if ($version !== null) {

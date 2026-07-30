@@ -19,7 +19,7 @@ class AdjustConfigForContentElementType
     ) {
     }
 
-    public function __invoke(DataContainer $dataContainer = null): void
+    public function __invoke(?DataContainer $dataContainer = null): void
     {
         if (!$this->isInEditMode($dataContainer)) {
             return;
@@ -33,14 +33,14 @@ class AdjustConfigForContentElementType
         $GLOBALS['TL_DCA']['tl_content']['fields']['playerSRC']['eval']['fieldType'] = 'radio';
     }
 
-    private function isInEditMode(DataContainer $dataContainer = null): bool
+    private function isInEditMode(?DataContainer $dataContainer = null): bool
     {
         $actMode = $this->requestStack->getCurrentRequest()->query->get('act');
 
         return ($dataContainer !== null) && ($dataContainer->id !== null) && ($actMode === 'edit');
     }
 
-    private function isContentElementType(DataContainer $dataContainer = null): bool
+    private function isContentElementType(?DataContainer $dataContainer = null): bool
     {
         $element = ContentModel::findById($dataContainer->id);
 

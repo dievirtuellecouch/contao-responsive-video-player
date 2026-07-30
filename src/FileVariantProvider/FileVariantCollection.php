@@ -33,12 +33,7 @@ class FileVariantCollection
                 continue;
             }
 
-            $file = $fileVariant->getFile();
-
-            // Only accept actual image files as poster
-            if ($file && str_starts_with($file->getMimeType(''), 'image/')) {
-                return $file;
-            }
+            return $fileVariant->getFile();
         }
 
         return null;
@@ -52,32 +47,6 @@ class FileVariantCollection
         );
 
         $items = \array_map(static fn (FileVariant $variant) => $variant->getFile(), $videoVariantWithFile);
-
-        // Deduplicate by storage path. Prefer the variant WITHOUT a media query
-        // so we always have a desktop/fallback source if paths collide.
-        $unique = [];
-        foreach ($items as $item) {
-            if (!$item) {
-                continue;
-            }
-
-            $path = $item->getPath();
-            $hasMedia = null !== $item->getExtraMetadata()->get('media');
-
-            if (!isset($unique[$path])) {
-                $unique[$path] = $item;
-                continue;
-            }
-
-            // If existing entry has a media query but the new one has none, replace it
-            $existingHasMedia = null !== $unique[$path]->getExtraMetadata()->get('media');
-            if ($existingHasMedia && !$hasMedia) {
-                $unique[$path] = $item;
-            }
-            // otherwise keep existing
-        }
-
-        $items = \array_values($unique);
 
         usort($items, static fn (FilesystemItem $a, FilesystemItem $b): int => self::sortByMediaTypePriority($a, $b));
 
@@ -106,9 +75,11 @@ class FileVariantCollection
             return 0;
         }
 
-        // Prefer items that define a media query in their extra metadata
-        $sortOrderA = (null !== $a->getExtraMetadata()->get('media')) ? -1 : 1;
-        $sortOrderB = (null !== $b->getExtraMetadata()->get('media')) ? -1 : 1;
+        $extraA = self::extraToArray($a->getExtraMetadata());
+        $extraB = self::extraToArray($b->getExtraMetadata());
+
+        $sortOrderA = \array_key_exists('media', $a->getExtraMetadata()) ? -1 : 1;
+        $sortOrderB = \array_key_exists('media', $b->getExtraMetadata()) ? -1 : 1;
 
         return $sortOrderA <=> $sortOrderB;
     }
