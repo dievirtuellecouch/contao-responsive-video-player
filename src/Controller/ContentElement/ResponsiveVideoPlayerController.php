@@ -51,7 +51,9 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
         if ($fileVariants->hasOneVideoAtLeast()) {
             $filesystemItems = $fileVariants->getAllVideos();
         }
-        $model->posterSRC = (string) $fileVariants->getPosterImage()?->getUuid() ?: '';
+        if ($posterImage = $fileVariants->getPosterImage()) {
+            $model->posterSRC = (string) $posterImage->getUuid();
+        }
 
         if (!$sourceFiles = $this->getSourceFiles($filesystemItems)) {
             return new Response();
@@ -123,7 +125,10 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
 
     private function parsePlayerOptions(ContentModel $model): HtmlAttributes
     {
-        $attributes = new HtmlAttributes(['controls' => true]);
+        $attributes = new HtmlAttributes([
+            'controls' => true,
+            'playsinline' => true,
+        ]);
 
         foreach (StringUtil::deserialize($model->playerOptions, true) as $option) {
             if ('player_nocontrols' === $option) {
