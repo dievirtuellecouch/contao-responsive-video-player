@@ -51,7 +51,9 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
         if ($fileVariants->hasOneVideoAtLeast()) {
             $filesystemItems = $fileVariants->getAllVideos();
         }
-        $model->posterSRC = (string) $fileVariants->getPosterImage()?->getUuid() ?: '';
+        if ($poster = $fileVariants->getPosterImage()) {
+            $model->posterSRC = (string) $poster->getUuid();
+        }
 
         if (!$sourceFiles = $this->getSourceFiles($filesystemItems)) {
             return new Response();
@@ -91,7 +93,7 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
         ;
 
         $range = $model->playerStart || $model->playerStop
-            ? sprintf('#t=%s', implode(',', [$model->playerStart ?: '', $model->playerStop ?: '']))
+            ? sprintf('#t=%s', $model->playerStop ? ($model->playerStart ?: '0').','.$model->playerStop : $model->playerStart)
             : '';
 
         $captions = [$model->playerCaption];
@@ -121,14 +123,14 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
                 'sources' => $sources,
             ],
             'metadata' => new Metadata([
-                Metadata::VALUE_CAPTION => array_filter($captions)[0] ?? '',
+                Metadata::VALUE_CAPTION => array_values(array_filter($captions))[0] ?? '',
             ]),
         ];
     }
 
     private function parsePlayerOptions(ContentModel $model): HtmlAttributes
     {
-        $attributes = new HtmlAttributes(['controls' => true]);
+        $attributes = new HtmlAttributes(['controls' => true, 'playsinline' => true]);
 
         foreach (StringUtil::deserialize($model->playerOptions, true) as $option) {
             if ('player_nocontrols' === $option) {
@@ -147,11 +149,14 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
      */
     private function getSourceFiles(FilesystemItemIterator $filesystemItems): array
     {
-        $filesystemItems = $filesystemItems->sort(SortMode::mediaTypePriority);
+        $filesystemItems = $filesystemItems
+            ->filter(static fn (FilesystemItem $item): bool => $item->isVideo())
+            ->sort(SortMode::mediaTypePriority);
         $items = [];
         $seen = [];
 
         foreach ($filesystemItems as $item) {
+
             if (!$publicUri = $this->filesStorage->generatePublicUri($item->getPath())) {
                 continue;
             }
@@ -171,6 +176,13 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
 
             $this->publicUriByStoragePath[$item->getPath()] = $publicUri;
         }
+
+        // Media conditions must take precedence over format preference.
+        // Otherwise desktop WebM shadows mobile MP4 on small screens.
+        usort($items, static fn (FilesystemItem $a, FilesystemItem $b): int =>
+            (null === $a->getExtraMetadata()->get('media')) <=>
+            (null === $b->getExtraMetadata()->get('media'))
+        );
 
         return $items;
     }

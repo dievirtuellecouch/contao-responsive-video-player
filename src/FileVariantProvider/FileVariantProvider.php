@@ -74,7 +74,10 @@ class FileVariantProvider
             $extension,
         );
 
-        $possibleFile = $this->filesStorage->get($searchPath);
+        // DBAFS may still contain records for files removed outside Contao.
+        $possibleFile = $this->filesStorage->fileExists($searchPath, VirtualFilesystem::BYPASS_DBAFS)
+            ? $this->filesStorage->get($searchPath)
+            : null;
 
         return new FileVariant(
             $possibleFile,

@@ -73,7 +73,10 @@
 
     &-button {
         appearance: none;
-        background: transparent;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
         border: none;
         width: var(--icon-size-m);
         height: var(--icon-size-m);
@@ -165,3 +168,8 @@
         }
     }
 }
+
+// Keep keyboard focus visible even while pointer controls are hidden.
+.video-player:focus-within .video-player__controls { opacity: 1; }
+.video-player-button:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.video-player-button[hidden] { display: none; }

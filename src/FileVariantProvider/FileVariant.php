@@ -14,7 +14,7 @@ use DVC\ResponsiveVideoPlayer\FileVariantProvider\VariantIdentifier;
 class FileVariant
 {
     public function __construct(
-        private ?FilesystemItem $file = null,
+        private ?FilesystemItem $file,
         private VariantIdentifier $identifier,
         private string $searchPath,
     ) {

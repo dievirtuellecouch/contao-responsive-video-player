@@ -15,19 +15,11 @@ class TrailingUnderscoreSearchStrategy implements SearchStrategyInterface
 
     public function getSearchPath(string $basePath, string $suffix, string $extension): string
     {
-        $replacementMask = \sprintf(
-            '${1}_%s.%s',
-            $suffix,
-            $extension
-        );
+        $directory = dirname($basePath);
+        $stem = pathinfo($basePath, PATHINFO_FILENAME);
+        $stem = preg_replace('/_(?:desktop|mobil|mobile|thumbnail)$/i', '', $stem);
 
-        $searchPath = \preg_replace(
-            '/(.*)_(.*)\.(.*)/',
-            $replacementMask,
-            $basePath
-        );
-
-        return $searchPath;
+        return ('.' === $directory ? '' : $directory.'/').$stem.'_'.$suffix.'.'.$extension;
     }
 
     public static function getSuffixOptions(VariantIdentifier $identifier): array

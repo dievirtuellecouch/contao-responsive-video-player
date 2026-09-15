@@ -40,7 +40,10 @@
                 class="video-player-button video-player-button_size-xl video-player-button_icon-play"
                 data-element="video-player-button"
                 data-action="play-toggle"
-                aria-label="Toggle play state"
+                type="button"
+                data-label-play="{{ 'MSC.videoPlayerPlay'|trans({}, 'contao_default') }}"
+                data-label-pause="{{ 'MSC.videoPlayerPause'|trans({}, 'contao_default') }}"
+                aria-label="{{ 'MSC.videoPlayerPlay'|trans({}, 'contao_default') }}"
             ></button>
         </div>
         <div class="video-player__controls">
@@ -48,13 +51,17 @@
                 class="video-player-button video-player-button_icon-play"
                 data-element="video-player-button"
                 data-action="play-toggle"
-                aria-label="Toggle play state"
+                type="button"
+                data-label-play="{{ 'MSC.videoPlayerPlay'|trans({}, 'contao_default') }}"
+                data-label-pause="{{ 'MSC.videoPlayerPause'|trans({}, 'contao_default') }}"
+                aria-label="{{ 'MSC.videoPlayerPlay'|trans({}, 'contao_default') }}"
             ></button>
             <button
                 class="video-player-button video-player-button_icon-fullscreen"
                 data-element="video-player-button"
                 data-action="fullscreen"
-                aria-label="Show video in fullscreen"
+                type="button"
+                aria-label="{{ 'MSC.videoPlayerFullscreen'|trans({}, 'contao_default') }}"
             ></button>
         </div>
     {% endif %}

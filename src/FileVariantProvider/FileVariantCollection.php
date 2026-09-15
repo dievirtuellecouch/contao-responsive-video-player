@@ -4,7 +4,6 @@ namespace DVC\ResponsiveVideoPlayer\FileVariantProvider;
 
 use Contao\CoreBundle\Filesystem\FilesystemItem;
 use Contao\CoreBundle\Filesystem\FilesystemItemIterator;
-use Contao\CoreBundle\Filesystem\ExtraMetadata;
 
 /**
  * Fix: compatible with Contao ≥5.5 where getExtraMetadata() returns an
@@ -48,7 +47,7 @@ class FileVariantCollection
     {
         $videoVariantWithFile = \array_filter(
             $this->items,
-            static fn (FileVariant $variant) => $variant->isVideo() && $variant->hasFile()
+            static fn (FileVariant $variant) => $variant->isVideo() && $variant->getFile()?->isVideo()
         );
 
         $items = \array_map(static fn (FileVariant $variant) => $variant->getFile(), $videoVariantWithFile);
@@ -113,11 +112,4 @@ class FileVariantCollection
         return $sortOrderA <=> $sortOrderB;
     }
 
-     /**
-     * Normalises Extra‑Metadata to a plain array for legacy helper functions.
-     */
-    private static function extraToArray(ExtraMetadata|array $extra): array
-    {
-        return $extra instanceof ExtraMetadata ? $extra->all() : $extra;
-    }
 }
