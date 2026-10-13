@@ -78,8 +78,8 @@ class FileVariantCollection
         $extraA = self::extraToArray($a->getExtraMetadata());
         $extraB = self::extraToArray($b->getExtraMetadata());
 
-        $sortOrderA = \array_key_exists('media', $a->getExtraMetadata()) ? -1 : 1;
-        $sortOrderB = \array_key_exists('media', $b->getExtraMetadata()) ? -1 : 1;
+        $sortOrderA = \array_key_exists('media', $extraA) ? -1 : 1;
+        $sortOrderB = \array_key_exists('media', $extraB) ? -1 : 1;
 
         return $sortOrderA <=> $sortOrderB;
     }
