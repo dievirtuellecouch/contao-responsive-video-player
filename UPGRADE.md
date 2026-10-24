@@ -1,9 +1,10 @@
-# Upgrade from 5.7.3 to 6.0.0
+# Upgrade from 5.7.3 to 5.7.4
 
 ## Compatibility and intentional changes
 
-Contao `^5.7` and PHP `^8.3` remain the supported requirements. Version 6 does
-not require Contao 6. Runtime verification for this release uses Contao 5.7.9
+Contao `^5.7` and PHP `^8.3` remain the supported requirements. The package keeps
+the requested 5.7 version line despite the intentional option/API changes below.
+Runtime verification for this release uses Contao 5.7.9
 and PHP 8.4; other allowed dependency combinations have not been exhaustively
 tested. The existing ExtraMetadata sorting fix is retained.
 
@@ -32,7 +33,7 @@ tested. The existing ExtraMetadata sorting fix is retained.
 
 1. Back up code, Composer files and the database; check local controller/Twig/CSS
    overrides. Confirm the current source with `composer show --path`.
-2. Require `dvc/contao-responsive-video-player:6.0.0`. Disable any higher-priority
+2. Require `dvc/contao-responsive-video-player:5.7.4`. Disable any higher-priority
    development path repository for this package. Perform a targeted Composer
    update with `--no-scripts`; do not update unrelated dependencies.
 3. Two additive DCA fields need a **separately approved schema update** if absent:

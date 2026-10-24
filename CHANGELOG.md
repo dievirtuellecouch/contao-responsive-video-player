@@ -1,10 +1,12 @@
 # Changelog
 
-## 6.0.0 — 2026-10-24
+## 5.7.4 — 2026-10-24
 
-This major version supports Contao 5.7 and PHP 8.3+. The version increase reflects
-the intentional controls-option inversion and controller constructor change,
-not a requirement for Contao 6. See [UPGRADE.md](UPGRADE.md) before updating.
+This release continues the requested 5.7 version line for Contao 5.7 and PHP 8.3+.
+It includes an intentional controls-option inversion and controller constructor
+change. These require reviewing [UPGRADE.md](UPGRADE.md) before updating, even
+though the package retains the 5.7 version line. The temporary 6.0.0 release/tag
+was withdrawn at the maintainer's request; functionality is unchanged.
 
 ### Added
 

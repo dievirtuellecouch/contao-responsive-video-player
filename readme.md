@@ -2,7 +2,7 @@
 
 Contao 5.7 video player with responsive file variants. Requires PHP 8.3 or newer.
 
-## Optional speaker toggle and icon colour (6.0.0)
+## Optional speaker toggle and icon colour (5.7.4)
 
 Edit a **Responsive video player** content element. In the player settings:
 
@@ -52,9 +52,10 @@ fields through Contao's normal field permissions.
 The label rename retains the existing `playerSoundOnce` field and values;
 the two-icon state update requires no further schema change.
 
-Version 6.0.0 is a major upgrade because the controls checkbox deliberately has
-the opposite meaning and the controller receives an additional service. It
-continues to support Contao 5.7; see [UPGRADE.md](UPGRADE.md) before updating.
+Version 5.7.4 continues the requested 5.7 version line. The controls checkbox
+deliberately has the opposite meaning and the controller receives an additional
+service; review [UPGRADE.md](UPGRADE.md) before updating. The temporarily
+published 6.0.0 release/tag has been withdrawn; functionality is unchanged.
 Release assets are committed under `public/`; no Node build is required on the
 target server. For source development, run `npm ci --ignore-scripts` and
 `npx gulp`. Composer derives the version from the Git tag.
