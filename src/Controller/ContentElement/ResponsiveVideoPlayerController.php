@@ -18,6 +18,7 @@ use Contao\StringUtil;
 use DVC\ResponsiveVideoPlayer\FileVariantProvider\FileVariantCollection;
 use DVC\ResponsiveVideoPlayer\FileVariantProvider\FileVariantProvider;
 use DVC\ResponsiveVideoPlayer\Util\AssetUtility;
+use DVC\ResponsiveVideoPlayer\Player\PlayerSettings;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -35,6 +36,7 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
         private readonly AssetUtility $assetUtility,
         private readonly FileVariantProvider $fileVariantProvider,
         private readonly VirtualFilesystem $filesStorage,
+        private readonly PlayerSettings $playerSettings,
     ) {
     }
 
@@ -63,6 +65,9 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
 
         $template->set('figure', (object) $figureData);
         $template->set('source_files', $sourceFiles);
+        $template->set('sound_once', (bool) $model->playerSoundOnce);
+        $template->set('icon_color', $this->playerSettings->iconColor($model->playerIconColor));
+        $template->set('hide_overlays', $this->playerSettings->hideOverlays(StringUtil::deserialize($model->playerOptions, true)));
 
         return $template->getResponse();
     }
@@ -125,21 +130,9 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
 
     private function parsePlayerOptions(ContentModel $model): HtmlAttributes
     {
-        $attributes = new HtmlAttributes([
-            'controls' => true,
-            'playsinline' => true,
-        ]);
-
-        foreach (StringUtil::deserialize($model->playerOptions, true) as $option) {
-            if ('player_nocontrols' === $option) {
-                $attributes->unset('controls');
-                continue;
-            }
-
-            $attributes->set(substr($option, 7));
-        }
-
-        return $attributes;
+        return $this->playerSettings->createAttributes(
+            StringUtil::deserialize($model->playerOptions, true),
+        );
     }
 
     /**

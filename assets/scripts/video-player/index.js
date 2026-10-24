@@ -1,4 +1,5 @@
 import { documentReady } from "./util/helper.js";
+import { SoundPlayback } from './sound-playback.js';
 
 const VideoPlayer = function() {
     const elements = {
@@ -14,16 +15,16 @@ const VideoPlayer = function() {
         isTouchDevice: null,
         isPlaying: false,
         hideControls: false,
-        playHasBeenClickedAtLeastOneTime: false,
+        hasStarted: false,
     };
 
     let controlsHideTimer = null;
 
     const onPlayToggle = function() {
-        state.playHasBeenClickedAtLeastOneTime = true;
+        state.hasStarted = true;
 
         if (elements.video.paused) {
-            elements.video.play();
+            elements.video.play().catch(onVideoStateChange);
         }
         else {
             elements.video.pause();
@@ -45,7 +46,8 @@ const VideoPlayer = function() {
     };
 
     const onVideoStateChange = function() {
-        state.isPlaying = !elements.video.paused;
+        state.isPlaying = !elements.video.paused && !elements.video.ended;
+        state.hasStarted = state.hasStarted || state.isPlaying;
         state.hideControls = state.isPlaying;
 
         for (const button of elements.buttons.playToggle) {
@@ -84,7 +86,7 @@ const VideoPlayer = function() {
     };
 
     const onControlsMouseover = function() {
-        if (!state.playHasBeenClickedAtLeastOneTime) {
+        if (!state.hasStarted) {
             return;
         }
 
@@ -96,7 +98,7 @@ const VideoPlayer = function() {
     };
 
     const checkFullscreenSupport = function() {
-        if (!elements.video.requestFullscreen || !elements.video.webkitRequestFullscreen) {
+        if (!elements.video.requestFullscreen && !elements.video.webkitRequestFullscreen) {
             return;
         }
 
@@ -117,7 +119,7 @@ const VideoPlayer = function() {
     const render = function() {
         elements.container.setAttribute('data-state', state.isPlaying ? 'playing' : 'paused');
         elements.container.setAttribute('data-hide-controls', state.hideControls);
-        elements.container.setAttribute('data-show-play-overlay', !state.playHasBeenClickedAtLeastOneTime);
+        elements.container.setAttribute('data-show-play-overlay', !state.hasStarted);
     };
 
     const checkTouchability = function() {
@@ -147,6 +149,7 @@ const VideoPlayer = function() {
 
         elements.video.addEventListener('play', onVideoStateChange);
         elements.video.addEventListener('pause', onVideoStateChange);
+        elements.video.addEventListener('ended', onVideoStateChange);
 
         const buttonElements = container.querySelectorAll('[data-element="video-player-button"]');
 
@@ -163,11 +166,19 @@ const VideoPlayer = function() {
                     elements.buttons.fullscreen.push(buttonElement);
                     buttonElement.addEventListener('click', onFullscreen);
                     break;
+
+                case 'sound-once':
+                    if (container.dataset.soundOnce === 'true') {
+                        new SoundPlayback(elements.video, buttonElement);
+                    }
+                    break;
             }
         }
 
         checkTouchability();
         checkFullscreenSupport();
+        onVideoStateChange();
+        container.dataset.videoPlayerReady = 'true';
     };
 
     return {
@@ -183,6 +194,7 @@ const initVideoPlayer = function() {
     }
 
     for (const element of elements) {
+        if (element.dataset.videoPlayerReady === 'true') continue;
         let player = new VideoPlayer();
         player.init(element);
     }

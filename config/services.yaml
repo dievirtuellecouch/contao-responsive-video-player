@@ -30,3 +30,5 @@ services:
       $projectDir: '%kernel.project_dir%'
       $uploadPath: '%contao.upload_path%'
       $webDir: '%contao.web_dir%'
+
+  DVC\ResponsiveVideoPlayer\Player\PlayerSettings:

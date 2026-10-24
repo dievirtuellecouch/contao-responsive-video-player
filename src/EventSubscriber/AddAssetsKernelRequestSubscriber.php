@@ -25,7 +25,7 @@ class AddAssetsKernelRequestSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (!$this->scopeMatcher->isFrontendRequest($request)) {
+        if (!$this->scopeMatcher->isFrontendRequest($request) && !$this->scopeMatcher->isBackendRequest($request)) {
             return;
         }
 

@@ -1,5 +1,63 @@
 # Changelog
 
+## 6.0.0 — 2026-10-24
+
+This major version supports Contao 5.7 and PHP 8.3+. The version increase reflects
+the intentional controls-option inversion and controller constructor change,
+not a requirement for Contao 6. See [UPGRADE.md](UPGRADE.md) before updating.
+
+### Added
+
+- Optional accessible top-left speaker: pure sound toggle without seeking,
+  play/pause calls, loop changes or automatic muting at the end.
+- Showing the speaker is presentation-only: initial mute, inline playback,
+  autoplay and loop options are preserved exactly. Initially audible playback
+  shows waves; muted playback shows a cross. Both directions preserve position.
+- Optional backend hex colour picker for all player icons and their borders.
+- Separate “Hide overlay elements / Overlay-Elemente verbergen” option in the
+  existing options field, scoped to the DVC player. Native controls, central
+  overlay controls and the speaker can be configured independently. Autoplay
+  only starts on load; loop alone controls repetition and is listed before it.
+  Neither changes control visibility. The speaker never changes the loop.
+  The hide-overlays checkbox follows show-controls directly in the backend.
+- Speaker toggles never start a paused, unstarted or ended video and preserve
+  its position. Existing field and option values are retained.
+- Full-frame overlays no longer intercept native media controls. Paused play
+  buttons remain clickable after playback; invisible controls are not hit targets.
+- Backend option renamed to “Show speaker / Lautsprecher anzeigen”, retaining
+  stored settings. Muted speaker/cross and audible speaker/waves icons switch
+  with the real sound state, including changes through native controls.
+- German/English autoplay warning directly under its checkbox. Generic field
+  description removed for DVC players only, leaving core/YouTube unchanged.
+- Final option order: inline, loop, autoplay, muted, show controls, hide overlays.
+- Remove only the speaker checkbox's native backend top offset so it continues
+  the options list; namespaced styles are also loaded in the backend.
+- Controls checkbox inverted and renamed to Show controls: off by default,
+  checked shows native controls. Positive `player_controls` key with a scoped
+  backend load adapter for checked legacy `player_nocontrols` values. Existing
+  checkbox states intentionally follow the new inverted meaning. No data rewrite
+  or schema migration; other Contao player types remain unchanged.
+- German/English field labels and speaker action labels; safe colour validation.
+- Settings and JavaScript regression tests; packaged rebuilt assets.
+
+### Fixed
+
+- Detect either fullscreen API (not both required), avoid unhandled play promise
+  rejections and guard against repeated initialisation.
+
+### Upgrade
+
+- Two additive DCA fields require an explicitly approved schema update after a
+  backup. Default values keep all existing players opt-out and their colours
+  unchanged. No editorial content migration is needed.
+- Install bundled assets and rebuild the application cache. Existing project
+  controller overrides must accept/inject `PlayerSettings`, forward `sound_once`,
+  `icon_color` and `hide_overlays`, and use the shared settings when building
+  media attributes. Composer derives the package version from its Git tag.
+- Theme overrides for play/stop must use `--video-player-icon-color` when set.
+- Poster/variant selection, preload and layout are not changed by this release.
+  Autoplay is independent of control visibility; browser autoplay policies apply.
+
 ## 5.7.3 — 2026-10-13
 
 ### Fixed

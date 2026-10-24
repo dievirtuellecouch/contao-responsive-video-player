@@ -1,3 +1,9 @@
+// The separate speaker checkbox directly continues the player-options list.
+// Remove only Contao's native 16px single-checkbox offset for this field.
+.dvc-video-player-speaker-option > .tl_checkbox_single_container {
+    margin-top: 0;
+}
+
 .video-player {
     --spacing-outside: 0.6em;
     --spacing-inside: 0.4em;
@@ -122,6 +128,7 @@
             &__play,
             &__controls {
                 opacity: 0;
+                visibility: hidden;
             }
         }
     }
@@ -132,6 +139,7 @@
 
             &__controls {
                 opacity: 0;
+                visibility: hidden;
             }
         }
     }
@@ -144,6 +152,7 @@
 
         & .video-player__play {
             opacity: 0;
+            visibility: hidden;
 
             & > * {
                 pointer-events: none;
@@ -162,6 +171,81 @@
 
         & .video-player__controls {
             opacity: 0;
+            visibility: hidden;
+        }
+    }
+
+    // No full-frame click target: only the speaker button accepts input.
+    &-button_icon-sound {
+        position: absolute;
+        z-index: 3;
+        left: 0.75rem;
+        top: 0.75rem;
+        width: 2.75rem;
+        height: 2.75rem;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: rgb(0 0 0 / 35%);
+        color: var(--video-player-icon-color, var(--evs-video-control-color, #fff));
+        cursor: pointer;
+        pointer-events: auto;
+
+        &::after {
+            position: absolute;
+            inset: 0.625rem;
+            content: "";
+            background: currentColor;
+            -webkit-mask: url("./sound-muted.svg") center / contain no-repeat;
+            mask: url("./sound-muted.svg") center / contain no-repeat;
+        }
+
+        &[aria-pressed="true"] {
+            background: rgb(0 0 0 / 65%);
+
+            &::after {
+                -webkit-mask-image: url("./sound.svg");
+                mask-image: url("./sound.svg");
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 2px;
+        }
+    }
+
+    &[data-icon-color] {
+        .video-player-button {
+            color: var(--video-player-icon-color);
+            border-color: currentColor;
+        }
+
+        .video-player-button_icon-play,
+        .video-player-button_icon-fullscreen {
+            position: relative;
+            background-image: none;
+
+            &::after {
+                position: absolute;
+                inset: 0;
+                content: "";
+                background: currentColor;
+                -webkit-mask: var(--video-player-icon-mask) center / contain no-repeat;
+                mask: var(--video-player-icon-mask) center / contain no-repeat;
+            }
+        }
+
+        .video-player-button_icon-play {
+            --video-player-icon-mask: var(--video-player-icon-play);
+
+            &:not(.video-player-button_size-xl)[data-state="playing"] {
+                --video-player-icon-mask: var(--video-player-icon-pause);
+            }
+        }
+
+        .video-player-button_icon-fullscreen {
+            --video-player-icon-mask: var(--video-player-icon-fullscreen);
         }
     }
 }

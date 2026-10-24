@@ -1,6 +1,6 @@
 {% extends '@Contao/content_element/player' %}
 
-{% set shouldShowControls = figure.media.attributes.autoplay is not defined %}
+{% set shouldShowControls = not (hide_overlays|default(false)) %}
 
 {% block headline_component %}
 <div class="video-player__overlay">{{ parent() }}</div>
@@ -15,8 +15,19 @@
     {% set attributes = attrs(attributes)
         .removeClass('content-responsive-video-player')
         .addClass('video-player')
-        .set('data-module', 'video-player', shouldShowControls)
+        .set('data-module', 'video-player', shouldShowControls or sound_once|default(false))
+        .setIfExists('data-icon-color', icon_color|default)
+        .set('data-sound-once', 'true', sound_once|default(false))
+        .set('data-hide-overlays', hide_overlays|default(false) ? 'true' : 'false')
     %}
+    {% if icon_color|default %}
+        {% do attributes.addStyle('--video-player-icon-color: ' ~ icon_color) %}
+        {# Absolute package URLs also work in stylesheet overrides: relative
+           URLs inside custom properties otherwise resolve against the theme. #}
+        {% do attributes.addStyle('--video-player-icon-play: url(' ~ asset('play.svg', 'responsive_video_player') ~ ')') %}
+        {% do attributes.addStyle('--video-player-icon-pause: url(' ~ asset('pause.svg', 'responsive_video_player') ~ ')') %}
+        {% do attributes.addStyle('--video-player-icon-fullscreen: url(' ~ asset('fullscreen.svg', 'responsive_video_player') ~ ')') %}
+    {% endif %}
     {% if figure.media.attributes.width is defined and figure.media.attributes.height is defined %}
         {% set ratioComponents = [figure.media.attributes.width, figure.media.attributes.height] %}
         {% do attributes.addStyle('--aspect-ratio: ' ~ ratioComponents | join('/') ) %}
@@ -30,6 +41,7 @@
     {% if shouldShowControls %}
         <div class="video-player__play">
             <button
+                type="button"
                 class="video-player-button video-player-button_size-xl video-player-button_icon-play"
                 data-element="video-player-button"
                 data-action="play-toggle"
@@ -38,18 +50,35 @@
         </div>
         <div class="video-player__controls">
             <button
+                type="button"
                 class="video-player-button video-player-button_icon-play"
                 data-element="video-player-button"
                 data-action="play-toggle"
                 aria-label="Toggle play state"
             ></button>
+            {% if figure.media.attributes.controls is defined %}
             <button
+                type="button"
                 class="video-player-button video-player-button_icon-fullscreen"
                 data-element="video-player-button"
                 data-action="fullscreen"
                 aria-label="Show video in fullscreen"
             ></button>
+            {% endif %}
         </div>
+    {% endif %}
+    {% if sound_once|default(false) %}
+        {% set initiallyMuted = figure.media.attributes.muted is defined %}
+        <button type="button"
+            class="video-player-button video-player-button_icon-sound"
+            data-element="video-player-button"
+            data-action="sound-once"
+            aria-pressed="{{ initiallyMuted ? 'false' : 'true' }}"
+            data-sound-state="{{ initiallyMuted ? 'muted' : 'audible' }}"
+            data-label-sound="{{ 'tl_content.player_sound_once_label'|trans({}, 'contao_tl_content') }}"
+            data-label-mute="{{ 'tl_content.player_sound_mute_label'|trans({}, 'contao_tl_content') }}"
+            aria-label="{{ (initiallyMuted ? 'tl_content.player_sound_once_label' : 'tl_content.player_sound_mute_label')|trans({}, 'contao_tl_content') }}"
+        ></button>
     {% endif %}
 {% endblock content %}
 
