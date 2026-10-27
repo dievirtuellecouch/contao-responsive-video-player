@@ -8,7 +8,7 @@ $GLOBALS['TL_LANG']['tl_content']['playerSoundOnce'] = [
 ];
 $GLOBALS['TL_LANG']['tl_content']['playerIconColor'] = [
     'Farbe der Player-Icons',
-    'Gemeinsame Farbe für Play, Pause/Stop, Vollbild, Lautsprecher und Lightbox Play. Leer lassen, um die bisherigen Template-Farben zu verwenden.',
+    'Gemeinsame Farbe für Play, Pause/Stop, Vollbild, Lautsprecher und Lightbox Play. Leer lassen für die Standardfarbe Weiß; das Theme kann eigene Vorgaben machen.',
 ];
 $GLOBALS['TL_LANG']['tl_content']['player_sound_once_label'] = 'Ton einschalten';
 $GLOBALS['TL_LANG']['tl_content']['player_sound_mute_label'] = 'Video stummschalten';

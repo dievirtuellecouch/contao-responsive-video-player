@@ -2,6 +2,10 @@
 
 ## Unreleased — dev/bsk
 
+- Default all player button colours to white unless the icon picker/theme
+  explicitly supplies a colour. The lightbox close button inherits the opening
+  action's colour, including an explicit picker value.
+
 - Move the optional speaker from the top left to the top right.
 - Add opt-in **Lightbox Play** (`playerLightboxPlay`, default false): an always
   visible top-left action using the reference site's outlined play triangle,

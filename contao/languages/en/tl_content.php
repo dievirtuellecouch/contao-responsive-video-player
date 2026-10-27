@@ -8,7 +8,7 @@ $GLOBALS['TL_LANG']['tl_content']['playerSoundOnce'] = [
 ];
 $GLOBALS['TL_LANG']['tl_content']['playerIconColor'] = [
     'Player icon colour',
-    'Shared colour for play, pause/stop, fullscreen, speaker and Lightbox Play. Leave empty to retain the existing template colours.',
+    'Shared colour for play, pause/stop, fullscreen, speaker and Lightbox Play. Leave empty for the white default; themes may provide their own overrides.',
 ];
 $GLOBALS['TL_LANG']['tl_content']['player_sound_once_label'] = 'Enable sound';
 $GLOBALS['TL_LANG']['tl_content']['player_sound_mute_label'] = 'Mute video';

@@ -37,7 +37,7 @@ globalThis.document = {
     createElement: tag => new Element(tag),
     activeElement: null,
 };
-globalThis.getComputedStyle = () => ({paddingRight: '4px'});
+globalThis.getComputedStyle = (element) => ({paddingRight: '4px', color: element?.computedColor || '#fff'});
 let checks = 0;
 for (const playing of [true, false]) {
     for (const muted of [true, false]) {
@@ -51,6 +51,7 @@ for (const playing of [true, false]) {
         button.dispatchEvent(new Event('click'));
         const dialog = lightbox.dialog, player = lightbox.player;
         assert.ok(dialog.open);
+        assert.equal(dialog.style.color, '#fff');
         assert.equal(dialog.attributes.get('aria-label'), 'Videoplayer');
         assert.equal(player.src, video.currentSrc);
         assert.equal(player.poster, video.poster);
@@ -114,4 +115,10 @@ third.open();
 assert.equal(third.player.querySelectorAll('source')[0].src, 'mobile.mp4');
 assert.equal(third.player.querySelectorAll('source')[0].media, '(max-width: 640px)');
 third.close();
+const colouredButton = new Element('button');
+colouredButton.computedColor = '#123abc';
+const coloured = new LightboxPlayback(new Element('video'), colouredButton);
+coloured.open();
+assert.equal(coloured.dialog.style.color, '#123abc');
+coloured.close();
 console.log(`PASS: ${checks} playback-state combinations; fresh audible modal, native controls, cleanup, focus, scrolling, reopen, multiple players and responsive fallback.`);

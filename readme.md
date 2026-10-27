@@ -2,6 +2,12 @@
 
 Contao 5.7 video player with responsive file variants. Requires PHP 8.3 or newer.
 
+## Default button colours
+
+Player buttons default to white. An explicit icon-picker value colours the
+controls, including the close action of the lightbox. Project themes may retain
+their own artwork and colour overrides without changing this bundle.
+
 ## Lightbox Play (development branch `dev/bsk`)
 
 Enable **Lightbox Play** in the content element's player settings. An outlined

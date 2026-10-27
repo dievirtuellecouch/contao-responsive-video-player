@@ -78,6 +78,7 @@
     }
 
     &-button {
+        color: var(--video-player-icon-color, #fff);
         appearance: none;
         background: transparent;
         border: none;
@@ -187,7 +188,7 @@
         border: 0;
         border-radius: 50%;
         background: rgb(0 0 0 / 35%);
-        color: var(--video-player-icon-color, var(--evs-video-control-color, #fff));
+        color: var(--video-player-icon-color, #fff);
         cursor: pointer;
         pointer-events: auto;
 
@@ -264,7 +265,7 @@
     border: 0;
     border-radius: 50%;
     background: rgb(0 0 0 / 35%);
-    color: var(--video-player-icon-color, var(--evs-video-control-color, #fff));
+    color: var(--video-player-icon-color, #fff);
     cursor: pointer;
     pointer-events: auto;
 
@@ -337,7 +338,7 @@
         border: 0;
         border-radius: 0;
         background: transparent;
-        color: #fff;
+        color: inherit;
         font: 2rem/1 sans-serif;
         cursor: pointer;
         transition: transform 200ms;

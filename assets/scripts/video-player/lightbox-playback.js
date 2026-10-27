@@ -17,6 +17,8 @@ export class LightboxPlayback {
 
         const dialog = document.createElement('dialog');
         dialog.className = 'dvc-video-lightbox';
+        // Carry the picker/theme colour into the dialog appended to <body>.
+        dialog.style.color = getComputedStyle(this.button).color || '#fff';
         dialog.setAttribute('aria-label', this.button.dataset.labelDialog || 'Video player');
         const player = document.createElement('video');
         player.controls = true;
