@@ -2,12 +2,46 @@
 
 Contao 5.7 video player with responsive file variants. Requires PHP 8.3 or newer.
 
+## Lightbox Play (development branch `dev/bsk`)
+
+Enable **Lightbox Play** in the content element's player settings. An outlined
+play triangle in a round button stays visible at the top left, including during
+autoplay and when central overlays are hidden. The existing player icon colour
+picker colours the triangle; its hover animation matches the speaker's scaling.
+The optional speaker sits at the top right. Both are independent opt-in actions.
+
+Clicking Lightbox Play opens a fresh native video player from the start with
+sound, autoplay and the normal browser controls. It uses the currently selected
+responsive source and caption tracks, without inheriting muted/loop settings.
+The embedded video pauses during the modal, retains its position and settings,
+and resumes on close only if it was playing beforehand. Close with Escape, the
+close button or a click on the backdrop. Focus returns to the opening action.
+The neutral dark backdrop blurs the page by 4px. No external lightbox library or
+project JavaScript is needed. Browser audio/autoplay policies still apply.
+
+Add the optional boolean `tl_content.playerLightboxPlay` column before activation
+and grant restricted editors access to it. See [UPGRADE.md](UPGRADE.md). Disabled
+is the default and preserves the previous version's behaviour.
+
+```bash
+node tests/lightbox-playback.mjs
+php tests/search-strategy.php /path/to/app/vendor/autoload.php
+```
+
+Browser verification: confirm top-left lightbox and top-right speaker placement,
+colour-picker inheritance, persistent corner visibility, hover/focus, desktop
+and mobile source selection, audible playback with native controls, Escape,
+backdrop/close button, keyboard focus, repeated open/close and independent
+multiple players. Verify that previously paused inline videos stay paused and
+playing videos resume at the retained position. Existing controls-only,
+speaker-only and no-corner-action elements must continue working unchanged.
+
 ## Optional speaker toggle and icon colour (5.7.4)
 
 Edit a **Responsive video player** content element. In the player settings:
 
 - **Show speaker / Lautsprecher anzeigen** adds a small speaker in the
-  top-left corner: a cross while muted, sound waves during audible playback.
+  top-right corner: a cross while muted, sound waves during audible playback.
   It only shows the icon and does not change any playback option on load.
   The mute checkbox alone controls initial muting; the loop checkbox alone
   controls repetition and autoplay alone controls starting on load.

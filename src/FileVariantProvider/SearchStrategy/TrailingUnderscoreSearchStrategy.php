@@ -33,7 +33,8 @@ class TrailingUnderscoreSearchStrategy implements SearchStrategyInterface
     public static function getSuffixOptions(VariantIdentifier $identifier): array
     {
         return match ($identifier) {
-            VariantIdentifier::VideoDesktop => ['desktop'],
+            // Accept the historical filename spelling without renaming media.
+            VariantIdentifier::VideoDesktop => ['desktop', 'dekstop'],
             VariantIdentifier::VideoMobile => ['mobil', 'mobile'],
             VariantIdentifier::ImagePoster => ['thumbnail'],
         };

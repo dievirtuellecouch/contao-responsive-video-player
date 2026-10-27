@@ -8,7 +8,7 @@ use DVC\ResponsiveVideoPlayer\Controller\ContentElement\ResponsiveVideoPlayerCon
 $GLOBALS['TL_DCA']['tl_content']['palettes'][ResponsiveVideoPlayerController::TYPE] = $GLOBALS['TL_DCA']['tl_content']['palettes']['player'];
 
 PaletteManipulator::create()
-    ->addField(['playerSoundOnce', 'playerIconColor'], 'playerOptions', PaletteManipulator::POSITION_AFTER)
+    ->addField(['playerSoundOnce', 'playerLightboxPlay', 'playerIconColor'], 'playerOptions', PaletteManipulator::POSITION_AFTER)
     ->applyToPalette(ResponsiveVideoPlayerController::TYPE, 'tl_content');
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['playerSoundOnce'] = [
@@ -29,4 +29,12 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['playerIconColor'] = [
         'tl_class' => 'w50 wizard',
     ],
     'sql' => "varchar(6) COLLATE ascii_bin NOT NULL default ''",
+];
+
+// Opt-in: existing content and playerOptions retain their previous behaviour.
+$GLOBALS['TL_DCA']['tl_content']['fields']['playerLightboxPlay'] = [
+    'exclude' => true,
+    'inputType' => 'checkbox',
+    'eval' => ['tl_class' => 'clr dvc-video-player-speaker-option'],
+    'sql' => ['type' => 'boolean', 'default' => false],
 ];

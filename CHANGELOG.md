@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased — dev/bsk
+
+- Move the optional speaker from the top left to the top right.
+- Add opt-in **Lightbox Play** (`playerLightboxPlay`, default false): an always
+  visible top-left action using the reference site's outlined play triangle,
+  the existing icon colour picker and the same hover scaling as the speaker.
+- Ship the complete native-dialog lightbox, styles and JavaScript in this bundle.
+  Playback starts in a fresh, unmuted player with native controls; the selected
+  responsive source and caption tracks are retained. The embedded player pauses
+  until dismissal, then resumes only if it was previously playing.
+- Support Escape, close button, backdrop dismissal, focus trapping/restoration,
+  scroll locking, multiple players and reduced motion. The backdrop is neutral
+  dark grey with a 4px blur. Browser playback restrictions still apply.
+- Accept legacy `_dekstop` filenames alongside `_desktop`, preserving existing
+  media files and the normal mobile breakpoint.
+- Keep all 5.7.4 option semantics, controller constructor arguments and Twig
+  extension points. Existing players acquire no lightbox action unless enabled.
+
+
 ## 5.7.4 — 2026-10-24
 
 This release continues the requested 5.7 version line for Contao 5.7 and PHP 8.3+.

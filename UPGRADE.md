@@ -1,3 +1,29 @@
+# Development update from 5.7.4 (`dev/bsk`)
+
+This is an additive, opt-in change. PHP/Contao requirements, existing player
+options, controller constructor and stored speaker/colour fields stay the same.
+The optional speaker now appears at the top right. Existing content is not
+rewritten and the lightbox defaults to off.
+
+Before installing, back up Composer files and the database. Add only the missing
+`tl_content.playerLightboxPlay` boolean field (default false, NOT NULL) using a
+reviewed schema change; avoid unrelated migrations. Restricted editors need
+normal Contao field permission for `playerLightboxPlay`. On rollback keep this
+additive column and its values.
+
+Install the committed public assets and rebuild the production cache. No Node
+build is needed in the consuming application. The lightbox requires native
+`HTMLDialogElement.showModal()` support in current browsers. Project subclasses
+which replace `getResponse()` must forward the optional `lightbox_play` template
+value to expose the new feature; old overrides continue working without it.
+Overrides of the `content` block must retain the new action if desired. No new
+constructor argument or external JS/CSS dependency is introduced.
+
+Run `node tests/lightbox-playback.mjs`, the existing regression tests and the
+browser checks in `readme.md`. Inline playback, autoplay, loop, mute, controls,
+colour and overlay settings retain their 5.7.4 semantics. Hiding central
+overlays never hides either corner action.
+
 # Upgrade from 5.7.3 to 5.7.4
 
 ## Compatibility and intentional changes

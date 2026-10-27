@@ -1,5 +1,6 @@
 import { documentReady } from "./util/helper.js";
 import { SoundPlayback } from './sound-playback.js';
+import { LightboxPlayback } from './lightbox-playback.js';
 
 const VideoPlayer = function() {
     const elements = {
@@ -165,6 +166,10 @@ const VideoPlayer = function() {
                 case 'fullscreen':
                     elements.buttons.fullscreen.push(buttonElement);
                     buttonElement.addEventListener('click', onFullscreen);
+                    break;
+
+                case 'lightbox-play':
+                    new LightboxPlayback(elements.video, buttonElement);
                     break;
 
                 case 'sound-once':

@@ -66,6 +66,7 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
         $template->set('figure', (object) $figureData);
         $template->set('source_files', $sourceFiles);
         $template->set('sound_once', (bool) $model->playerSoundOnce);
+        $template->set('lightbox_play', (bool) $model->playerLightboxPlay);
         $template->set('icon_color', $this->playerSettings->iconColor($model->playerIconColor));
         $template->set('hide_overlays', $this->playerSettings->hideOverlays(StringUtil::deserialize($model->playerOptions, true)));
 

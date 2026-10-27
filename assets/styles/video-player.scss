@@ -83,7 +83,7 @@
         border: none;
         width: var(--icon-size-m);
         height: var(--icon-size-m);
-        transition: transform var(--timing-duration-default);
+        transition: transform var(--timing-duration-default, 200ms);
         -webkit-tap-highlight-color: transparent;
 
         @media (hover: hover) {
@@ -179,7 +179,7 @@
     &-button_icon-sound {
         position: absolute;
         z-index: 3;
-        left: 0.75rem;
+        right: 0.75rem;
         top: 0.75rem;
         width: 2.75rem;
         height: 2.75rem;
@@ -248,4 +248,106 @@
             --video-player-icon-mask: var(--video-player-icon-fullscreen);
         }
     }
+}
+
+// Independent corner action: never hidden by playback/overlay visibility rules.
+.video-player .video-player-button_icon-lightbox {
+    position: absolute;
+    z-index: 3;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 35%);
+    color: var(--video-player-icon-color, var(--evs-video-control-color, #fff));
+    cursor: pointer;
+    pointer-events: auto;
+
+    svg {
+        width: 1.375rem;
+        height: 1.375rem;
+        margin-left: 3px;
+    }
+
+    &:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 3px;
+    }
+}
+
+// Native modal gives Escape, focus trapping and background inertness without
+// relying on a host theme, a lightbox library or any project-specific JavaScript.
+.dvc-video-lightbox {
+    position: fixed;
+    inset: 0;
+    width: min(1120px, calc(100vw - 2rem));
+    height: fit-content;
+    max-width: none;
+    max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: #000;
+    color: #fff;
+    box-shadow: 0 1.5rem 5rem rgb(0 0 0 / 45%);
+    overflow: auto;
+
+    &::backdrop {
+        background: rgb(0 0 0 / 82%);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+    }
+
+    // Override general theme video sizing while retaining the source's ratio.
+    > video {
+        position: static;
+        display: block;
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        max-height: calc(100vh - 5rem);
+        max-height: calc(100dvh - 5rem);
+        aspect-ratio: auto;
+        object-fit: contain;
+        background: #000;
+    }
+
+    &__bar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        min-height: 3rem;
+        padding: 0 0.25rem;
+        background: #111;
+    }
+
+    &__close {
+        appearance: none;
+        display: grid;
+        place-items: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: #fff;
+        font: 2rem/1 sans-serif;
+        cursor: pointer;
+        transition: transform 200ms;
+
+        &:hover { transform: scale(1.1); }
+        &:focus-visible { outline: 2px solid currentColor; outline-offset: -4px; }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .video-player .video-player-button,
+    .dvc-video-lightbox__close { transition: none; }
 }

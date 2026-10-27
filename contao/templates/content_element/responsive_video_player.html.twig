@@ -15,7 +15,7 @@
     {% set attributes = attrs(attributes)
         .removeClass('content-responsive-video-player')
         .addClass('video-player')
-        .set('data-module', 'video-player', shouldShowControls or sound_once|default(false))
+        .set('data-module', 'video-player', shouldShowControls or sound_once|default(false) or lightbox_play|default(false))
         .setIfExists('data-icon-color', icon_color|default)
         .set('data-sound-once', 'true', sound_once|default(false))
         .set('data-hide-overlays', hide_overlays|default(false) ? 'true' : 'false')
@@ -79,6 +79,19 @@
             data-label-mute="{{ 'tl_content.player_sound_mute_label'|trans({}, 'contao_tl_content') }}"
             aria-label="{{ (initiallyMuted ? 'tl_content.player_sound_once_label' : 'tl_content.player_sound_mute_label')|trans({}, 'contao_tl_content') }}"
         ></button>
+    {% endif %}
+    {% if lightbox_play|default(false) and not as_editor_view %}
+        <button type="button"
+            class="video-player-button video-player-button_icon-lightbox"
+            data-element="video-player-button"
+            data-action="lightbox-play"
+            aria-haspopup="dialog"
+            aria-label="{{ 'tl_content.player_lightbox_open'|trans({}, 'contao_tl_content') }}"
+            data-label-close="{{ 'tl_content.player_lightbox_close'|trans({}, 'contao_tl_content') }}"
+            data-label-dialog="{{ 'tl_content.player_lightbox_title'|trans({}, 'contao_tl_content') }}"
+        >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7.4 5v14l11-7z"/></svg>
+        </button>
     {% endif %}
 {% endblock content %}
 
