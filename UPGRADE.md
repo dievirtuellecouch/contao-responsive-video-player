@@ -1,50 +1,39 @@
-# Template compatibility update (`dev/bsk`)
+# Upgrade from 5.7.4 to 5.7.5
 
-New layout variants are additive and need no schema update. Existing custom
-names and model dimensions remain unchanged. They become available after
-clearing the application's production cache. Both base and per-variant files
-can be overridden through the application's `templates/` directory; see the
-README for paths and the original-bundle inheritance namespace.
+PHP `^8.3` and Contao `^5.7` requirements, constructor arguments, stored option
+keys and existing template names remain unchanged. Lightbox Play is opt-in and
+existing content is not rewritten. The speaker now appears at the top left;
+Lightbox Play appears at the top right. Default buttons are white unless a
+picker/theme colour is supplied.
 
-The shared `content`, `attributes`, `media`, `script` and `corner_controls`
-blocks remain available. Additional blocks are `overlay_controls`,
-`speaker_button` and `lightbox_button`. Project content/media overrides should
-include the corner controls once beside the actual video frame, preserve
-tracks, and inherit initialization attributes/scripts. Constructor arguments
-and stored option keys are unchanged. Playback options remain independent of
-layout choice. No project-specific aspect ratio or media record is introduced
-into the bundle.
+1. Back up Composer files and the database. Require
+   `dvc/contao-responsive-video-player:5.7.5` through the VCS repository. Disable
+   any higher-priority development path repository for this package and use a
+   targeted Composer update with `--no-scripts`; retain unrelated locked versions.
+2. Compared with 5.7.4, only `tl_content.playerLightboxPlay` is a new column
+   (boolean, default false, NOT NULL). Review the additive schema change before
+   applying it. If it already exists from `dev/bsk`, no schema update is needed.
+   Retain all speaker/colour/lightbox columns and values on rollback. Restricted
+   editors need normal Contao permission for the new field.
+3. Install the committed public assets and rebuild the production cache. No
+   Node build is needed in the application. Lightbox support requires native
+   `HTMLDialogElement.showModal()` in current browsers.
+4. Existing controller replacements must forward `lightbox_play` to expose the
+   new option. Theme content/media overrides must retain the optional
+   `corner_controls` block once beside the video and preserve tracks. The
+   `attributes`, `media`, `content` and `script` blocks remain available, with
+   additional `overlay_controls`, `speaker_button` and `lightbox_button` blocks.
+5. New selectable ratio templates are additive and have no schema requirements.
+   Override their matching application `templates/` paths using the documented
+   original-bundle namespace. Playback settings remain independent of layout.
+6. Verify the installed Git reference and asset URLs. Run the README's installed
+   artifact tests, then check playback, mute, corner placement, colour, native
+   controls, fullscreen, Lightbox Play, Escape and multiple players.
 
-An intentionally corrected behaviour: an explicit poster selection is now
-respected; automatic discovery is a fallback. Editor previews no longer
-initialize a frontend player without a video. Controller data now includes
-subtitle tracks configured through Contao's standard fields and file metadata.
-
-# Development update from 5.7.4 (`dev/bsk`)
-
-This is an additive, opt-in change. PHP/Contao requirements, existing player
-options, controller constructor and stored speaker/colour fields stay the same.
-The optional speaker now appears at the top right. Existing content is not
-rewritten and the lightbox defaults to off.
-
-Before installing, back up Composer files and the database. Add only the missing
-`tl_content.playerLightboxPlay` boolean field (default false, NOT NULL) using a
-reviewed schema change; avoid unrelated migrations. Restricted editors need
-normal Contao field permission for `playerLightboxPlay`. On rollback keep this
-additive column and its values.
-
-Install the committed public assets and rebuild the production cache. No Node
-build is needed in the consuming application. The lightbox requires native
-`HTMLDialogElement.showModal()` support in current browsers. Project subclasses
-which replace `getResponse()` must forward the optional `lightbox_play` template
-value to expose the new feature; old overrides continue working without it.
-Overrides of the `content` block must retain the new action if desired. No new
-constructor argument or external JS/CSS dependency is introduced.
-
-Run `node tests/lightbox-playback.mjs`, the existing regression tests and the
-browser checks in `readme.md`. Inline playback, autoplay, loop, mute, controls,
-colour and overlay settings retain their 5.7.4 semantics. Hiding central
-overlays never hides either corner action.
+Corrected behaviour: an explicitly selected poster now wins over inferred
+thumbnails. Contao subtitle tracks are passed through, and editor previews do
+not initialize a frontend player without a video. Variant discovery retains
+plain filenames and explicit fallback sources rather than misclassifying them.
 
 # Upgrade from 5.7.3 to 5.7.4
 

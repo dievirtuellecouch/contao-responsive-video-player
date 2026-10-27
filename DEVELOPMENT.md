@@ -1,20 +1,24 @@
-# BSK development version
+# Development and release installation
 
-The `dev/bsk` branch starts from release `5.7.4`, also used by EVT.
-Composer installs this branch as `dev-dev/bsk`.
+The current stable release is `5.7.5`. Composer derives the version from the Git
+tag; `composer.json` deliberately has no hardcoded version field. Production
+and reproducible application installs should require the stable tag through
+`https://github.com/dievirtuellecouch/contao-responsive-video-player.git`.
+They must not depend on an application-local bundle checkout or a path version
+pretending to be a release.
 
-In the BSK development application, clone this repository into
-`bundles/contao-responsive-video-player` and register that directory as a
-Composer path repository with symlinking enabled and version `dev-dev/bsk`.
-The installed package in `vendor/dvc/contao-responsive-video-player` then points
-to the editable Git checkout. Keep the VCS repository configured as a fallback
-for environments without the local path repository.
+The `dev/bsk` branch remains available for source development. To work on a local
+checkout, explicitly register it as a Composer path repository with symlinking
+and require `dev-dev/bsk`. Remove that path repository and switch back to the
+stable requirement before validating a release installation. Keep local Git
+checkouts outside `vendor` so Composer can replace installed artifacts safely.
 
-Run the regression tests described in `readme.md` against the application's
-`vendor/autoload.php`. After changing frontend sources, rebuild and commit the
-shipped assets as described there. Clear the application's production cache
-after changing service definitions, DCA or templates.
+Run the regression tests in `readme.md` against a compatible application.
+For frontend source changes, use `npm ci --ignore-scripts` and `npx gulp` and
+commit the generated public assets. Source changes to services, DCA or templates
+require clearing the application's production cache. No Node build is needed
+when consuming a release.
 
-Installation requires the two additive database fields documented in
-`UPGRADE.md`. Review only this bundle's schema changes, without applying
-unrelated migrations.
+Schema requirements and reviewed upgrade steps are documented in `UPGRADE.md`.
+No database content, credentials or project-specific layouts belong in a bundle
+release.

@@ -1,48 +1,31 @@
 # Changelog
 
-## Unreleased — dev/bsk
+## 5.7.5 — 2026-10-28
 
-- Ship selectable layout-only Twig variants for 16:9, 4:3, square, portrait
-  9:16 and cinema 21:9. All inherit the common player and honour every backend
-  playback, control, speaker, lightbox and colour option.
-- Expose `overlay_controls`, `speaker_button` and `lightbox_button` blocks in
-  addition to `corner_controls`. Editor previews contain no interactive player
-  controls, player initialization attribute or frontend script registration.
-- Default icons now fit inside their buttons without tiling/cropping and have
-  a visible keyboard focus outline.
-- Preserve an explicitly selected poster, using filename discovery only when
-  no poster was chosen. Retain Contao text-track metadata and the default track
-  in the inline player; lightbox playback clones the same tracks.
-- Keep plain filenames intact, reject non-image posters and retain an explicitly
-  chosen desktop video when only a mobile sibling can be inferred.
-- Add actual Contao template/option matrix, controller and variant-provider tests.
-
-- Swap corner actions: speaker at the top left, Lightbox Play at the top right.
-
-- Expose the speaker and Lightbox Play actions as the reusable Twig block
-  `corner_controls`, so project content overrides can retain the optional
-  actions without copying their markup. Default rendering stays unchanged.
-
-- Default all player button colours to white unless the icon picker/theme
-  explicitly supplies a colour. The lightbox close button inherits the opening
-  action's colour, including an explicit picker value.
-
-- Move the optional speaker from the top left to the top right.
-- Add opt-in **Lightbox Play** (`playerLightboxPlay`, default false): an always
-  visible top-left action using the reference site's outlined play triangle,
-  the existing icon colour picker and the same hover scaling as the speaker.
-- Ship the complete native-dialog lightbox, styles and JavaScript in this bundle.
-  Playback starts in a fresh, unmuted player with native controls; the selected
-  responsive source and caption tracks are retained. The embedded player pauses
-  until dismissal, then resumes only if it was previously playing.
-- Support Escape, close button, backdrop dismissal, focus trapping/restoration,
-  scroll locking, multiple players and reduced motion. The backdrop is neutral
-  dark grey with a 4px blur. Browser playback restrictions still apply.
-- Accept legacy `_dekstop` filenames alongside `_desktop`, preserving existing
-  media files and the normal mobile breakpoint.
-- Keep all 5.7.4 option semantics, controller constructor arguments and Twig
-  extension points. Existing players acquire no lightbox action unless enabled.
-
+- Add opt-in **Lightbox Play**: a persistent top-right action opens a fresh
+  player with sound, autoplay and native controls. The inline player pauses
+  while the modal is open and resumes only if it was playing beforehand.
+- Place the optional speaker at the top left. It remains a pure mute toggle.
+- Ship the complete neutral dark/blurred native-dialog lightbox, close/backdrop
+  and Escape handling, focus trapping/restoration, scroll locking and cleanup.
+- Default all buttons to white, respecting an explicit picker/theme colour;
+  preserve caption tracks in the inline and lightbox players.
+- Ship overridable layout-only templates for 16:9, 4:3, 1:1, 9:16 and 21:9,
+  inheriting every backend option from the common player template.
+- Provide reusable `overlay_controls`, `corner_controls`, `speaker_button`
+  and `lightbox_button` blocks for theme integration.
+- Keep editor previews noninteractive. Fit icons inside their buttons and
+  provide visible keyboard focus indicators.
+- Respect an explicitly selected poster; use `_thumbnail` discovery as fallback.
+- Support historical `_dekstop` names; keep plain filenames intact and retain
+  selected desktop files when only a mobile sibling can be inferred. Reject
+  non-image poster variants.
+- Preserve PHP/Contao requirements, controller constructor, 5.7.4 option keys,
+  existing custom template names and all other playback semantics. Lightbox
+  Play defaults to off; `tl_content.playerLightboxPlay` is the only new column
+  compared with 5.7.4. Review [UPGRADE.md](UPGRADE.md) before installation.
+- Include controller, template-matrix and variant-provider regression tests,
+  alongside the existing playback/settings and collection tests.
 
 ## 5.7.4 — 2026-10-24
 
