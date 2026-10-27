@@ -67,6 +67,17 @@
             {% endif %}
         </div>
     {% endif %}
+    {{ block('corner_controls') }}
+{% endblock content %}
+
+{% block script %}
+{% add "video_player_js" to head %}
+    <script src="{{ asset('video-player.js', 'responsive_video_player') }}" defer></script>
+{% endadd %}
+{% endblock script %}
+
+{# Reusable for theme content overrides; keep the actions beside the media. #}
+{% block corner_controls %}
     {% if sound_once|default(false) %}
         {% set initiallyMuted = figure.media.attributes.muted is defined %}
         <button type="button"
@@ -93,10 +104,4 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7.4 5v14l11-7z"/></svg>
         </button>
     {% endif %}
-{% endblock content %}
-
-{% block script %}
-{% add "video_player_js" to head %}
-    <script src="{{ asset('video-player.js', 'responsive_video_player') }}" defer></script>
-{% endadd %}
-{% endblock script %}
+{% endblock %}

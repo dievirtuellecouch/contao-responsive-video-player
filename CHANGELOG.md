@@ -2,6 +2,10 @@
 
 ## Unreleased — dev/bsk
 
+- Expose the speaker and Lightbox Play actions as the reusable Twig block
+  `corner_controls`, so project content overrides can retain the optional
+  actions without copying their markup. Default rendering stays unchanged.
+
 - Default all player button colours to white unless the icon picker/theme
   explicitly supplies a colour. The lightbox close button inherits the opening
   action's colour, including an explicit picker value.
