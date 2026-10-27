@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 $GLOBALS['TL_LANG']['tl_content']['playerSoundOnce'] = [
     'Show speaker',
-    'Shows the speaker icon in the top right. Clicking only toggles sound; playback position, pause, autoplay and loop remain unchanged.',
+    'Shows the speaker icon in the top left. Clicking only toggles sound; playback position, pause, autoplay and loop remain unchanged.',
 ];
 $GLOBALS['TL_LANG']['tl_content']['playerIconColor'] = [
     'Player icon colour',
@@ -18,7 +18,7 @@ $GLOBALS['TL_LANG']['tl_content']['player_autoplay_hint'] = 'Autoplay with sound
 
 $GLOBALS['TL_LANG']['tl_content']['playerLightboxPlay'] = [
     'Lightbox Play',
-    'Always shows a play icon at the top left. Opens the video from the beginning with sound and native controls in a lightbox. The embedded player is paused while the lightbox is open.',
+    'Always shows a play icon at the top right. Opens the video from the beginning with sound and native controls in a lightbox. The embedded player is paused while the lightbox is open.',
 ];
 $GLOBALS['TL_LANG']['tl_content']['player_lightbox_open'] = 'Play video in lightbox';
 $GLOBALS['TL_LANG']['tl_content']['player_lightbox_close'] = 'Close video';

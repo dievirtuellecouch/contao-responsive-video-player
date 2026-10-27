@@ -2,6 +2,8 @@
 
 ## Unreleased — dev/bsk
 
+- Swap corner actions: speaker at the top left, Lightbox Play at the top right.
+
 - Expose the speaker and Lightbox Play actions as the reusable Twig block
   `corner_controls`, so project content overrides can retain the optional
   actions without copying their markup. Default rendering stays unchanged.

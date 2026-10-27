@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 $GLOBALS['TL_LANG']['tl_content']['playerSoundOnce'] = [
     'Lautsprecher anzeigen',
-    'Zeigt das Lautsprecher-Icon oben rechts. Ein Klick schaltet nur den Ton an oder aus; Wiedergabeposition, Pause, Autoplay und Schleife bleiben unverändert.',
+    'Zeigt das Lautsprecher-Icon oben links. Ein Klick schaltet nur den Ton an oder aus; Wiedergabeposition, Pause, Autoplay und Schleife bleiben unverändert.',
 ];
 $GLOBALS['TL_LANG']['tl_content']['playerIconColor'] = [
     'Farbe der Player-Icons',
@@ -18,7 +18,7 @@ $GLOBALS['TL_LANG']['tl_content']['player_autoplay_hint'] = 'Autoplay mit Ton wi
 
 $GLOBALS['TL_LANG']['tl_content']['playerLightboxPlay'] = [
     'Lightbox Play',
-    'Zeigt dauerhaft oben links ein Play-Icon. Ein Klick öffnet das Video von Beginn an mit Ton und normalen Steuerelementen in einer Lightbox. Der eingebettete Player wird währenddessen pausiert.',
+    'Zeigt dauerhaft oben rechts ein Play-Icon. Ein Klick öffnet das Video von Beginn an mit Ton und normalen Steuerelementen in einer Lightbox. Der eingebettete Player wird währenddessen pausiert.',
 ];
 $GLOBALS['TL_LANG']['tl_content']['player_lightbox_open'] = 'Video in Lightbox abspielen';
 $GLOBALS['TL_LANG']['tl_content']['player_lightbox_close'] = 'Video schließen';

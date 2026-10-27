@@ -11,10 +11,10 @@ their own artwork and colour overrides without changing this bundle.
 ## Lightbox Play (development branch `dev/bsk`)
 
 Enable **Lightbox Play** in the content element's player settings. An outlined
-play triangle in a round button stays visible at the top left, including during
+play triangle in a round button stays visible at the top right, including during
 autoplay and when central overlays are hidden. The existing player icon colour
 picker colours the triangle; its hover animation matches the speaker's scaling.
-The optional speaker sits at the top right. Both are independent opt-in actions.
+The optional speaker sits at the top left. Both are independent opt-in actions.
 
 Clicking Lightbox Play opens a fresh native video player from the start with
 sound, autoplay and the normal browser controls. It uses the currently selected
@@ -34,7 +34,7 @@ node tests/lightbox-playback.mjs
 php tests/search-strategy.php /path/to/app/vendor/autoload.php
 ```
 
-Browser verification: confirm top-left lightbox and top-right speaker placement,
+Browser verification: confirm top-right lightbox and top-left speaker placement,
 colour-picker inheritance, persistent corner visibility, hover/focus, desktop
 and mobile source selection, audible playback with native controls, Escape,
 backdrop/close button, keyboard focus, repeated open/close and independent
@@ -47,7 +47,7 @@ speaker-only and no-corner-action elements must continue working unchanged.
 Edit a **Responsive video player** content element. In the player settings:
 
 - **Show speaker / Lautsprecher anzeigen** adds a small speaker in the
-  top-right corner: a cross while muted, sound waves during audible playback.
+  top-left corner: a cross while muted, sound waves during audible playback.
   It only shows the icon and does not change any playback option on load.
   The mute checkbox alone controls initial muting; the loop checkbox alone
   controls repetition and autoplay alone controls starting on load.
