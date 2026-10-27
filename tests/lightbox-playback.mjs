@@ -67,6 +67,14 @@ for (const playing of [true, false]) {
         assert.equal(video.paused, true);
         assert.equal(document.documentElement.style.overflow, 'hidden');
         lightbox.open(); assert.equal(lightbox.dialog, dialog);
+        const tab = new Event('keydown', {cancelable: true});
+        Object.assign(tab, {key: 'Tab', shiftKey: false});
+        dialog.dispatchEvent(tab);
+        assert.equal(document.activeElement, player);
+        const backTab = new Event('keydown', {cancelable: true});
+        Object.assign(backTab, {key: 'Tab', shiftKey: true});
+        dialog.dispatchEvent(backTab);
+        assert.equal(document.activeElement, dialog.children[1].children[0]);
         dialog.dispatchEvent(new Event('cancel', {cancelable: true}));
         assert.equal(lightbox.dialog, null);
         assert.equal(dialog.isConnected, false);

@@ -20,6 +20,7 @@ export class LightboxPlayback {
         dialog.setAttribute('aria-label', this.button.dataset.labelDialog || 'Video player');
         const player = document.createElement('video');
         player.controls = true;
+        player.tabIndex = 0;
         player.playsInline = true;
         player.autoplay = true;
         player.muted = false;
@@ -82,6 +83,18 @@ export class LightboxPlayback {
         dialog.addEventListener('pointerdown', (event) => { startedOutside = outside(event); });
         dialog.addEventListener('click', (event) => {
             if (event.target === dialog && startedOutside && outside(event)) this.close();
+        });
+        dialog.addEventListener('keydown', (event) => {
+            if (event.key !== 'Tab') return;
+            // Explicitly wrap focus: Chromium can otherwise focus the body
+            // after the last action when native media controls use shadow DOM.
+            if (!event.shiftKey && document.activeElement === close) {
+                event.preventDefault();
+                player.focus({preventScroll: true});
+            } else if (event.shiftKey && document.activeElement === player) {
+                event.preventDefault();
+                close.focus({preventScroll: true});
+            }
         });
         dialog.showModal();
         close.focus({preventScroll: true});
