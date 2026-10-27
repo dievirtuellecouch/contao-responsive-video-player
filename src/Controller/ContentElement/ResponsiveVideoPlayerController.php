@@ -53,7 +53,7 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
         if ($fileVariants->hasOneVideoAtLeast()) {
             $filesystemItems = $fileVariants->getAllVideos();
         }
-        if ($posterImage = $fileVariants->getPosterImage()) {
+        if (!$model->posterSRC && ($posterImage = $fileVariants->getPosterImage())) {
             $model->posterSRC = (string) $posterImage->getUuid();
         }
 
@@ -117,11 +117,36 @@ class ResponsiveVideoPlayerController extends AbstractContentElementController
             $sourceFiles,
         );
 
+        $tracks = [];
+
+        if ($model->textTrackSRC) {
+            $trackItems = FilesystemUtil::listContentsFromSerialized($this->filesStorage, $model->textTrackSRC);
+            foreach ($trackItems as $trackItem) {
+                if (!$publicUri = $this->filesStorage->generatePublicUri($trackItem->getPath())) {
+                    continue;
+                }
+                $extraMetadata = $trackItem->getExtraMetadata();
+                if (!$textTrack = $extraMetadata->getTextTrack()) {
+                    continue;
+                }
+                if (!$label = $extraMetadata->getLocalized()?->getFirst()?->getTitle()) {
+                    continue;
+                }
+                $tracks[] = (new HtmlAttributes())
+                    ->setIfExists('kind', $textTrack->getType()?->value)
+                    ->set('label', $label)
+                    ->set('srclang', $textTrack->getSourceLanguage())
+                    ->set('src', (string) $publicUri);
+            }
+            ($tracks[0] ?? null)?->set('default');
+        }
+
         return [
             'media' => [
                 'type' => 'video',
                 'attributes' => $attributes,
                 'sources' => $sources,
+                'tracks' => $tracks,
             ],
             'metadata' => new Metadata([
                 Metadata::VALUE_CAPTION => array_filter($captions)[0] ?? '',

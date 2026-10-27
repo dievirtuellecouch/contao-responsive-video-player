@@ -2,6 +2,21 @@
 
 ## Unreleased — dev/bsk
 
+- Ship selectable layout-only Twig variants for 16:9, 4:3, square, portrait
+  9:16 and cinema 21:9. All inherit the common player and honour every backend
+  playback, control, speaker, lightbox and colour option.
+- Expose `overlay_controls`, `speaker_button` and `lightbox_button` blocks in
+  addition to `corner_controls`. Editor previews contain no interactive player
+  controls, player initialization attribute or frontend script registration.
+- Default icons now fit inside their buttons without tiling/cropping and have
+  a visible keyboard focus outline.
+- Preserve an explicitly selected poster, using filename discovery only when
+  no poster was chosen. Retain Contao text-track metadata and the default track
+  in the inline player; lightbox playback clones the same tracks.
+- Keep plain filenames intact, reject non-image posters and retain an explicitly
+  chosen desktop video when only a mobile sibling can be inferred.
+- Add actual Contao template/option matrix, controller and variant-provider tests.
+
 - Swap corner actions: speaker at the top left, Lightbox Play at the top right.
 
 - Expose the speaker and Lightbox Play actions as the reusable Twig block

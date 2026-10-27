@@ -15,7 +15,7 @@
     {% set attributes = attrs(attributes)
         .removeClass('content-responsive-video-player')
         .addClass('video-player')
-        .set('data-module', 'video-player', shouldShowControls or sound_once|default(false) or lightbox_play|default(false))
+        .set('data-module', 'video-player', not as_editor_view and (shouldShowControls or sound_once|default(false) or lightbox_play|default(false)))
         .setIfExists('data-icon-color', icon_color|default)
         .set('data-sound-once', 'true', sound_once|default(false))
         .set('data-hide-overlays', hide_overlays|default(false) ? 'true' : 'false')
@@ -28,7 +28,10 @@
         {% do attributes.addStyle('--video-player-icon-pause: url(' ~ asset('pause.svg', 'responsive_video_player') ~ ')') %}
         {% do attributes.addStyle('--video-player-icon-fullscreen: url(' ~ asset('fullscreen.svg', 'responsive_video_player') ~ ')') %}
     {% endif %}
-    {% if figure.media.attributes.width is defined and figure.media.attributes.height is defined %}
+    {% if video_aspect_ratio|default %}
+        {% do attributes.addStyle('--aspect-ratio: ' ~ video_aspect_ratio) %}
+        {% do attributes.addClass('video-player_aspect-ratio-' ~ video_aspect_ratio|replace({'/': '-'})) %}
+    {% elseif figure.media.attributes.width is defined and figure.media.attributes.height is defined %}
         {% set ratioComponents = [figure.media.attributes.width, figure.media.attributes.height] %}
         {% do attributes.addStyle('--aspect-ratio: ' ~ ratioComponents | join('/') ) %}
         {% do attributes.addClass('video-player_aspect-ratio-' ~ ratioComponents | join('-')) %}
@@ -38,14 +41,22 @@
 
 {% block content %}
     {{ parent() }}
-    {% if shouldShowControls %}
+    {% if not as_editor_view %}
+        {{ block('overlay_controls') }}
+        {{ block('corner_controls') }}
+    {% endif %}
+{% endblock content %}
+
+{# Themes may move controls beside their media without copying event markup. #}
+{% block overlay_controls %}
+    {% if shouldShowControls and not as_editor_view %}
         <div class="video-player__play">
             <button
                 type="button"
                 class="video-player-button video-player-button_size-xl video-player-button_icon-play"
                 data-element="video-player-button"
                 data-action="play-toggle"
-                aria-label="Toggle play state"
+                aria-label="{{ 'tl_content.player_play_toggle_label'|trans({}, 'contao_tl_content') }}"
             ></button>
         </div>
         <div class="video-player__controls">
@@ -54,7 +65,7 @@
                 class="video-player-button video-player-button_icon-play"
                 data-element="video-player-button"
                 data-action="play-toggle"
-                aria-label="Toggle play state"
+                aria-label="{{ 'tl_content.player_play_toggle_label'|trans({}, 'contao_tl_content') }}"
             ></button>
             {% if figure.media.attributes.controls is defined %}
             <button
@@ -62,23 +73,31 @@
                 class="video-player-button video-player-button_icon-fullscreen"
                 data-element="video-player-button"
                 data-action="fullscreen"
-                aria-label="Show video in fullscreen"
+                aria-label="{{ 'tl_content.player_fullscreen_label'|trans({}, 'contao_tl_content') }}"
             ></button>
             {% endif %}
         </div>
     {% endif %}
-    {{ block('corner_controls') }}
-{% endblock content %}
+{% endblock %}
 
 {% block script %}
+{% if not as_editor_view %}
 {% add "video_player_js" to head %}
     <script src="{{ asset('video-player.js', 'responsive_video_player') }}" defer></script>
 {% endadd %}
+{% endif %}
 {% endblock script %}
 
 {# Reusable for theme content overrides; keep the actions beside the media. #}
 {% block corner_controls %}
-    {% if sound_once|default(false) %}
+    {% if not as_editor_view %}
+        {{ block('speaker_button') }}
+        {{ block('lightbox_button') }}
+    {% endif %}
+{% endblock %}
+
+{% block speaker_button %}
+    {% if sound_once|default(false) and not as_editor_view %}
         {% set initiallyMuted = figure.media.attributes.muted is defined %}
         <button type="button"
             class="video-player-button video-player-button_icon-sound"
@@ -91,6 +110,9 @@
             aria-label="{{ (initiallyMuted ? 'tl_content.player_sound_once_label' : 'tl_content.player_sound_mute_label')|trans({}, 'contao_tl_content') }}"
         ></button>
     {% endif %}
+{% endblock %}
+
+{% block lightbox_button %}
     {% if lightbox_play|default(false) and not as_editor_view %}
         <button type="button"
             class="video-player-button video-player-button_icon-lightbox"

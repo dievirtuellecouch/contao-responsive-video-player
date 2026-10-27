@@ -2,6 +2,71 @@
 
 Contao 5.7 video player with responsive file variants. Requires PHP 8.3 or newer.
 
+## Included templates and overrides
+
+The content element's template selector provides these bundle-owned templates:
+
+| Template | Layout |
+| --- | --- |
+| `content_element/responsive_video_player` | Default; uses the configured size, otherwise 16:9 |
+| `content_element/responsive_video_player/landscape_16_9` | 16:9 |
+| `content_element/responsive_video_player/classic_4_3` | 4:3 |
+| `content_element/responsive_video_player/square_1_1` | 1:1 |
+| `content_element/responsive_video_player/portrait_9_16` | 9:16 |
+| `content_element/responsive_video_player/cinema_21_9` | 21:9 |
+
+Variants only choose the display ratio and preserve the source video. They do
+not force autoplay, looping, muting, controls, speaker, Lightbox Play or colour.
+Those remain content-element settings. All behaviour, icons, styles and scripts
+ship with this bundle; no theme or project extension is required. An explicitly
+selected poster wins over automatic `_thumbnail` discovery. Selected subtitle
+tracks with Contao track metadata/labels are included inline and in the lightbox.
+
+Override the base in
+`templates/content_element/responsive_video_player.html.twig`, or an individual
+variant at the matching path, for example
+`templates/content_element/responsive_video_player/portrait_9_16.html.twig`:
+
+```twig
+{% extends '@Contao_ResponsiveVideoPlayerBundle/content_element/responsive_video_player/portrait_9_16.html.twig' %}
+
+{% block attributes %}
+    {% set attributes = attrs(attributes).addClass('my-video') %}
+    {{ parent() }}
+{% endblock %}
+```
+
+The explicit bundle namespace above addresses the original file and prevents
+recursive inheritance. Shipped variants inherit the `@Contao` base, so a project
+base override also applies to all variants. Clear Contao's production cache after
+adding/removing templates. Existing project templates keep their own names.
+
+Prefer small block overrides. A theme replacing `content` or `media` must retain
+`overlay_controls` (if desired) and `corner_controls` beside the video. Individual
+corner actions also have `speaker_button` and `lightbox_button` blocks. Keep the
+`attributes` and `script` parent blocks and the `data-element` / `data-action`
+attributes so the bundled JavaScript can initialize and handle all actions.
+Scope frame dimensions, cropping and theme artwork to project classes; do not
+copy project dimensions into the bundle. Project adapters must also preserve
+`figure.media.tracks`, the media attributes and all optional template flags.
+Editor previews intentionally show a file list without interactive controls.
+
+Read-only integration tests against a compatible installed Contao application:
+
+```bash
+php tests/templates.php /path/to/contao
+php tests/controller.php /path/to/contao
+php tests/variant-provider.php /path/to/contao/vendor/autoload.php
+# Also verify a project's own derived template, when installed:
+php tests/templates.php /path/to/contao --template=responsive_video_player/my_theme
+```
+
+The template matrix renders every combination of native controls, central
+visibility, autoplay, loop, mute, speaker, lightbox and picker (256 per template).
+It verifies tracks, ratio inheritance, initialization and noninteractive editor
+previews. Controller tests verify poster priority/fallback, subtitle metadata,
+playback ranges and optional flags. They do not edit application content.
+
 ## Default button colours
 
 Player buttons default to white. An explicit icon-picker value colours the

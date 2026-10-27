@@ -81,6 +81,11 @@
         color: var(--video-player-icon-color, #fff);
         appearance: none;
         background: transparent;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        padding: 0;
+        cursor: pointer;
         border: none;
         width: var(--icon-size-m);
         height: var(--icon-size-m);
@@ -96,6 +101,11 @@
 
         &:active {
             transform: scale(0.9);
+        }
+
+        &:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 3px;
         }
 
         &_size-xl {

@@ -35,6 +35,11 @@ class FileVariantProvider
         }
 
         $collection = new FileVariantCollection();
+        // A filename without a suffix cannot describe responsive siblings.
+        // Let the controller use the explicitly selected file unchanged.
+        if (!preg_match('/_[^\\/]*\.[^\\/]+$/', basename($baseFile->getPath()))) {
+            return $collection;
+        }
         $strategy = $this->searchStrategyProvider->getFirst();
 
         if ($strategy === null) {
@@ -58,6 +63,18 @@ class FileVariantProvider
             }
         }
 
+        // Retain an explicitly selected video with a nonstandard suffix even
+        // when only mobile siblings were discovered.
+        if ($baseFile->isVideo()) {
+            $hasBase = false;
+            foreach ($collection->getAllVideos() as $video) {
+                $hasBase = $hasBase || $video->getPath() === $baseFile->getPath();
+            }
+            if (!$hasBase) {
+                $collection->add(new FileVariant($baseFile, VariantIdentifier::VideoDesktop, $baseFile->getPath()));
+            }
+        }
+
         return $collection;
     }
 
@@ -75,6 +92,9 @@ class FileVariantProvider
         );
 
         $possibleFile = $this->filesStorage->get($searchPath);
+        if ($possibleFile && ($identifier === VariantIdentifier::ImagePoster ? !$possibleFile->isImage() : !$possibleFile->isVideo())) {
+            $possibleFile = null;
+        }
 
         return new FileVariant(
             $possibleFile,

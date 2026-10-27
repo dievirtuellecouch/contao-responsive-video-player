@@ -1,3 +1,25 @@
+# Template compatibility update (`dev/bsk`)
+
+New layout variants are additive and need no schema update. Existing custom
+names and model dimensions remain unchanged. They become available after
+clearing the application's production cache. Both base and per-variant files
+can be overridden through the application's `templates/` directory; see the
+README for paths and the original-bundle inheritance namespace.
+
+The shared `content`, `attributes`, `media`, `script` and `corner_controls`
+blocks remain available. Additional blocks are `overlay_controls`,
+`speaker_button` and `lightbox_button`. Project content/media overrides should
+include the corner controls once beside the actual video frame, preserve
+tracks, and inherit initialization attributes/scripts. Constructor arguments
+and stored option keys are unchanged. Playback options remain independent of
+layout choice. No project-specific aspect ratio or media record is introduced
+into the bundle.
+
+An intentionally corrected behaviour: an explicit poster selection is now
+respected; automatic discovery is a fallback. Editor previews no longer
+initialize a frontend player without a video. Controller data now includes
+subtitle tracks configured through Contao's standard fields and file metadata.
+
 # Development update from 5.7.4 (`dev/bsk`)
 
 This is an additive, opt-in change. PHP/Contao requirements, existing player

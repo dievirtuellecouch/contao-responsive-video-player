@@ -23,3 +23,6 @@ $GLOBALS['TL_LANG']['tl_content']['playerLightboxPlay'] = [
 $GLOBALS['TL_LANG']['tl_content']['player_lightbox_open'] = 'Video in Lightbox abspielen';
 $GLOBALS['TL_LANG']['tl_content']['player_lightbox_close'] = 'Video schließen';
 $GLOBALS['TL_LANG']['tl_content']['player_lightbox_title'] = 'Videoplayer';
+
+$GLOBALS['TL_LANG']['tl_content']['player_play_toggle_label'] = 'Abspielen / Pausieren';
+$GLOBALS['TL_LANG']['tl_content']['player_fullscreen_label'] = 'Video im Vollbild anzeigen';
